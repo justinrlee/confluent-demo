@@ -1,0 +1,127 @@
+--- # Kafka Brokers
+# Listeners:
+# 9071: INTERNAL (SASL_SSL, LDAP)
+# 9092: EXTERNAL (SASL_SSL, LDAP) - exposed externally on port 443
+# 9072: REPLICATION (MTLS)
+# 9073: TOKEN (SASL_SSL, OAUTHBEARER w/ MDS)
+
+apiVersion: platform.confluent.io/v1beta1
+kind: Kafka
+metadata:
+  name: kafka
+  namespace: ${NAMESPACE}
+spec:
+  replicas: 3
+  authorization:
+    superUsers:
+      - User:kraft
+      - User:mds
+      - User:kafka
+      - User:operator
+    type: rbac
+  image:
+    application: confluentinc/cp-server:${CONFLUENT_PLATFORM_VERSION}
+    init: confluentinc/confluent-init-container:${CFK_INIT_CONTAINER_VERSION}
+  #   init: justinrlee/confluent-init-container:2.11.0-r1
+  # podTemplate:
+  #   envVars:
+  #   - name: T_REPAIR_MODE
+  #     value: kafka-0
+  dataVolumeCapacity: 5Gi
+  listeners:
+    internal:
+      # 9071 (PLAIN LDAP)
+      authentication:
+        type: ldap
+        jaasConfig:
+          secretRef: kafka-ldap-client
+      tls:
+        enabled: true
+    external:
+      # 9092 (PLAIN LDAP)
+      externalAccess:
+        type: staticForHostBasedRouting
+        staticForHostBasedRouting:
+          port: 443
+          domain: 127-0-0-1.nip.io
+          brokerPrefix: kafka-
+      authentication:
+        jaasConfig:
+          secretRef: kafka-ldap-client
+        type: ldap
+      tls:
+        enabled: true
+    replication:
+      # 9072 (mTLS)
+      authentication:
+        mtls:
+          sslClientAuthentication: required
+        type: mtls
+      tls:
+        enabled: true
+    # TOKEN (9073) is OAUTHBEARER
+  metricReporter:
+    enabled: false
+  services:
+    mds:
+      provider:
+        ldap:
+          address: ldap://ldap.${NAMESPACE}.svc.cluster.local:389
+          authentication:
+            simple:
+              secretRef: admin-ldap-client
+            type: simple
+          configurations:
+            groupNameAttribute: cn
+            groupObjectClass: Group
+            groupMemberAttribute: member
+            groupMemberAttributePattern: CN=(.*),DC=confluent,DC=justinrlee,DC=io
+            groupSearchBase: dc=confluent,dc=justinrlee,dc=io
+            groupSearchScope: 2
+            userNameAttribute: cn
+            userMemberOfAttributePattern: CN=(.*),DC=confluent,DC=justinrlee,DC=io
+            userObjectClass: inetOrgPerson
+            userSearchBase: dc=confluent,dc=justinrlee,dc=io
+            userSearchScope: 2
+          tls:
+            enabled: true
+        type: ldap
+      tls:
+        enabled: true
+      tokenKeyPair:
+        secretRef: mds-token
+  dependencies:
+    metricsClient:
+      url: https://controlcenter.${NAMESPACE}.svc.cluster.local:9090
+      tls:
+        enabled: true
+        secretRef: tls-controlcenter
+    kafkaRest:
+      authentication:
+        bearer:
+          secretRef: kafka-ldap-client
+        type: bearer
+      # tls:
+      #   enabled: true
+      #   secretRef: tls-kafka
+    kRaftController:
+      controllerListener:
+        tls:
+          enabled: true
+        authentication:
+          # mtls:
+          #   sslClientAuthentication: required
+          type: mtls
+      clusterRef:
+        name: kraft
+    schemaRegistry:
+      authentication:
+        type: basic
+        basic:
+          secretRef: rest-client
+      tls:
+        enabled: true
+        secretRef: tls-kraft
+      url: https://schemaregistry.${NAMESPACE}.svc.cluster.local:8081
+  tls:
+    secretRef: tls-kafka

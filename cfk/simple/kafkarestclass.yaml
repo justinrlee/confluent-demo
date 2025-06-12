@@ -1,0 +1,12 @@
+---
+apiVersion: platform.confluent.io/v1beta1
+kind: KafkaRestClass
+metadata:
+  name: default
+  namespace: ${NAMESPACE}
+spec:
+  kafkaRest:
+    authentication:
+      type: basic
+      basic:
+        secretRef: rest-client

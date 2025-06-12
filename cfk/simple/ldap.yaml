@@ -1,0 +1,35 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: ldap
+  namespace: ${NAMESPACE}
+spec:
+  selector:
+    matchLabels:
+      app: ldap # has to match .spec.template.metadata.labels
+  serviceName: "ldap"
+  replicas: 1 # by default is 1
+  # minReadySeconds: 10 # by default is 0
+  template:
+    metadata:
+      labels:
+        app: ldap # has to match .spec.selector.matchLabels
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: ldap
+        image: justinrlee/openldap:2025-06-11-multiarch
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ldap
+  namespace: ${NAMESPACE}
+spec:
+  selector:
+    app: ldap
+  ports:
+    - port: 389
+      targetPort: 10389
+# ldapsearch -x -H ldap://ldap.confluent.svc.cluster.local:389 -D 'cn=admin,dc=confluent,dc=justinrlee,dc=io' -w GoodNewsEveryone -b 'dc=confluent,dc=justinrlee,dc=io'
