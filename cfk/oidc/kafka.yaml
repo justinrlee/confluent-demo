@@ -1,0 +1,136 @@
+--- # Kafka Brokers
+# Listeners:
+# 9071: INTERNAL (mTLS)
+# 9092: EXTERNAL (SASL_SSL, OIDC) - exposed externally on port 443
+# 9072: REPLICATION (MTLS)
+# 9073: TOKEN (SASL_SSL, OAUTHBEARER w/ MDS)
+
+apiVersion: platform.confluent.io/v1beta1
+kind: Kafka
+metadata:
+  name: kafka
+  namespace: ${NAMESPACE}
+spec:
+  replicas: 3
+  authorization:
+    type: rbac
+    superUsers:
+      - User:kraft
+      - User:mds
+      - User:kafka
+      - User:operator
+      # - User:ssologin
+  image:
+    application: confluentinc/cp-server:${CONFLUENT_PLATFORM_VERSION}
+    init: confluentinc/confluent-init-container:${CFK_INIT_CONTAINER_VERSION}
+  dataVolumeCapacity: 5Gi
+  listeners:
+    # INTERNAL: 9071 (mTLS))
+    internal:
+      authentication:
+        mtls:
+          sslClientAuthentication: required
+        type: mtls
+      tls:
+        enabled: true
+    # EXTERNAL: 9092 (OIDC)
+    external:
+      externalAccess:
+        type: staticForHostBasedRouting
+        staticForHostBasedRouting:
+          port: 443
+          domain: 127-0-0-1.nip.io
+          brokerPrefix: kafka-
+      authentication:
+        type: oauth
+        jaasConfig:
+          secretRef: oauth-jaas
+        # https://keycloak.default:8443//realms/confluent/.well-known/openid-configuration
+        oauthSettings:
+          subClaimName: client_id
+          expectedIssuer: http://keycloak.default:8080/realms/confluent
+          jwksEndpointUri: http://keycloak.default:8080/realms/confluent/protocol/openid-connect/certs
+          tokenEndpointUri: http://keycloak.default:8080/realms/confluent/protocol/openid-connect/token
+      tls:
+        enabled: true
+    # REPLICATION: 9072 (mTLS)
+    replication:
+      authentication:
+        mtls:
+          sslClientAuthentication: required
+        type: mtls
+      tls:
+        enabled: true
+    # TOKEN: 9073?
+  metricReporter:
+    enabled: false
+  services:
+    mds:
+      tls:
+        enabled: true
+      tokenKeyPair:
+        secretRef: mds-token
+      provider:
+        #Server-side OAuth/OIDC authentication for MDS
+        oauth:
+          configurations:
+            subClaimName: client_id
+            expectedIssuer: http://keycloak.default:8080/realms/confluent
+            jwksEndpointUri: http://keycloak.default:8080/realms/confluent/protocol/openid-connect/certs
+
+        #sso config is required for enabling SSO for control center
+        sso:
+          enabled: true
+          clientCredentials:
+            secretRef: oauth-jaas
+          configurations:
+            groupsClaimName: profile_groups
+            subClaimName: sub
+            issuer: https://keycloak.127-0-0-1.nip.io/realms/confluent
+            jwksEndpointUri: http://keycloak.default:8080/realms/confluent/protocol/openid-connect/certs
+            tokenBaseEndpointUri: http://keycloak.default:8080/realms/confluent/protocol/openid-connect/token
+            authorizeBaseEndpointUri: https://keycloak.127-0-0-1.nip.io/realms/confluent/protocol/openid-connect/auth
+            refreshToken: false
+  dependencies:
+    kRaftController:
+      controllerListener:
+        tls:
+          enabled: true
+        authentication:
+          type: mtls
+      clusterRef:
+        name: kraft
+    kafkaRest:
+      authentication:
+        type: oauth
+        jaasConfig:
+          secretRef: oauth-jaas
+        oauthSettings:
+          subClaimName: client_id
+          expectedIssuer: http://keycloak.default:8080/realms/confluent
+          jwksEndpointUri: http://keycloak.default:8080/realms/confluent/protocol/openid-connect/certs
+          tokenEndpointUri: http://keycloak.default:8080/realms/confluent/protocol/openid-connect/token
+      # tls:
+      #   enabled: true
+      #   secretRef: tls-kafka
+    # metricsClient:
+    #   url: https://controlcenter.${NAMESPACE}.svc.cluster.local:9090
+    #   tls:
+    #     enabled: true
+    #     secretRef: tls-controlcenter
+    schemaRegistry:
+      authentication:
+        type: oauth
+        oauth:
+          secretRef: oauth-jaas
+          configuration:
+            tokenEndpointUri: http://keycloak.default:8080/realms/confluent/protocol/openid-connect/token
+            expectedIssuer: http://keycloak.default:8080/realms/confluent
+            jwksEndpointUri: http://keycloak.default:8080/realms/confluent/protocol/openid-connect/certs
+            subClaimName: client_id
+      tls:
+        enabled: true
+        secretRef: tls-kraft
+      url: https://schemaregistry.${NAMESPACE}.svc.cluster.local:8081
+  tls:
+    secretRef: tls-kafka

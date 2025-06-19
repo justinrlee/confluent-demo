@@ -3,7 +3,7 @@
 set -e
 set -x
 
-. versions.sh
+. ./versions.sh
 
 # Install Ingress Nginx and Confluent Helm Repos
 helm repo add confluentinc https://packages.confluent.io/helm --force-update

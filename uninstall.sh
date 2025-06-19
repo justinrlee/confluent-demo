@@ -3,7 +3,7 @@
 # set -e
 # set -x
 
-. versions.sh
+. ./versions.sh
 
 # Could do all of these as a single command
 kubectl -n ${NAMESPACE} delete \
