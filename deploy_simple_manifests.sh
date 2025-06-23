@@ -49,3 +49,11 @@ do
     envsubst < cfk/simple/${f} > ${LOCAL_DIR}/${f}
     kubectl apply -f ${LOCAL_DIR}/${f}
 done
+
+while [[ $(kubectl -n ${NAMESPACE} get pods -l app=controlcenter | grep '3/3' | wc -l) -lt 1 ]];
+do
+    echo "Waiting for ControlCenter pod to be ready"
+    kubectl -n ${NAMESPACE} get pods
+    echo ''
+    sleep 5
+done

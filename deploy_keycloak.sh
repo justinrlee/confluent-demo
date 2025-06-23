@@ -1,3 +1,4 @@
+#!/bin/bash
 
 . versions.sh
 
@@ -31,12 +32,3 @@ helm upgrade --install ingress-nginx \
 
 kubectl apply -f cfk/keycloak/keycloak.yaml
 kubectl apply -f cfk/keycloak/keycloak-ingress.yaml
-
-# curl -L https://raw.githubusercontent.com/keycloak/keycloak-quickstarts/refs/heads/main/kubernetes/keycloak.yaml |\
-#     > local/x-keycloak.yaml
-
-
-
-# curl -L https://raw.githubusercontent.com/keycloak/keycloak-quickstarts/refs/heads/main/kubernetes/keycloak-ingress.yaml |\
-#     sed 's|KEYCLOAK_HOST|keycloak.127-0-0-1.nip.io|g' > local/x-keycloak-ingress.yaml
-# kubectl apply -f local/keycloak-ingress.yaml

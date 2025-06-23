@@ -131,7 +131,7 @@ spec:
               cpu: 2000m
               memory: 2000Mi
             requests:
-              cpu: 500m
+              cpu: 100m
               memory: 1700Mi
           volumeMounts:
             # Using volume mount for PostgreSQL's data folder as it is otherwise not writable

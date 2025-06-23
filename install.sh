@@ -47,13 +47,13 @@ sleep 10
 
 helm upgrade --install cp-flink-kubernetes-operator \
     confluentinc/flink-kubernetes-operator \
-    --set operatorPod.resources.requests.cpu=1 \
-    --set operatorPod.resources.requests.memory=1Gi \
+    --set operatorPod.resources.requests.cpu=100m \
     --namespace ${NAMESPACE} \
     --version ${FKO_VERSION}
 
 helm upgrade --install cmf \
     confluentinc/confluent-manager-for-apache-flink \
+    --set resources.requests.cpu=100m \
     --namespace ${NAMESPACE} \
     --version ${CMF_VERSION}
 

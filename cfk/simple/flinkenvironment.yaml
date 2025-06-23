@@ -11,7 +11,9 @@ spec:
         "confluent-demo/owned-by": "${NAMESPACE}"
     spec:
       flinkConfiguration:
-        taskmanager.numberOfTaskSlots: "2"
+        "metrics.reporter.prom.factory.class": "org.apache.flink.metrics.prometheus.PrometheusReporterFactory"
+        "metrics.reporter.prom.port": "9249-9250"
+        taskmanager.numberOfTaskSlots: "1"
         rest.profiling.enabled: "true"
   cmfRestClassRef:
     name: default
