@@ -7,7 +7,7 @@ set -x
 
 # Install Ingress Nginx and Confluent Helm Repos
 helm repo add confluentinc https://packages.confluent.io/helm --force-update
-# helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx --force-update
+helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx --force-update
 helm repo update
 
 # Create namespaces if they don't exist
@@ -30,7 +30,6 @@ helm upgrade --install confluent-for-kubernetes \
     --set namespaced=false \
     --set enableCMFDay2Ops=true \
     --version ${CFK_CHART_VERSION}
-    # --set "controller.service.ports.https=9092"
 
 while [[ $(kubectl -n cert-manager get pods -l app.kubernetes.io/instance=cert-manager | grep '1/1' | wc -l) -lt 3 ]];
 do
@@ -145,22 +144,3 @@ do
     echo "Waiting for CFK to be ready..."
     sleep 10
 done
-
-
-# # TODO: doesn't actually check to see if pod is up, just that it's not 0/1
-# while [[ $(kubectl -n ${NAMESPACE} get pods -l app=kraft | grep -q "0/1") ]]; do
-#     echo "Waiting for KRaft Controller to be ready..."
-#     sleep 10
-# done
-
-# # TODO: Install kafka-connect
-
-# # TODO: Install kafka-connect-ui
-
-# # TODO: Install kafka-connect-ui
-
-
-# TODO: Cleanup
-# Delete CFK helm chart
-
-# delete namespace
