@@ -5,7 +5,7 @@ set -x
 
 . versions.sh
 
-export MANIFEST_DIR=./cfk/simple
+export MANIFEST_DIR=./manifests/simple
 export LOCAL_DIR=./local
 
 kubectl -n ${NAMESPACE} create secret generic kafka-ldap-client \
@@ -46,7 +46,7 @@ for f in \
     $(ls -1 ${MANIFEST_DIR})
 do
     echo ${f}
-    envsubst < cfk/simple/${f} > ${LOCAL_DIR}/${f}
+    envsubst < ${MANIFEST_DIR}/${f} > ${LOCAL_DIR}/${f}
     kubectl apply -f ${LOCAL_DIR}/${f}
 done
 
@@ -57,3 +57,5 @@ do
     echo ''
     sleep 5
 done
+
+echo 'Access at "https://confluent.127-0-0-1.nip.io"'

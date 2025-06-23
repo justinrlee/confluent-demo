@@ -7,7 +7,8 @@ spec:
   flinkEnvironment: ${NAMESPACE}
   image: confluentinc/cp-flink:1.19.1-cp1
   flinkVersion: v1_19
-  # flinkConfiguration:
+  flinkConfiguration:
+    taskmanager.numberOfTaskSlots: "1"
   #   "metrics.reporter.prom.factory.class": "org.apache.flink.metrics.prometheus.PrometheusReporterFactory"
   #   "metrics.reporter.prom.port": "9249-9250"
   serviceAccount: flink
@@ -22,7 +23,7 @@ spec:
   job:
     jarURI: local:///opt/flink/examples/streaming/StateMachineExample.jar
     state: running
-    parallelism: 3
+    parallelism: 1
     upgradeMode: stateless
   cmfRestClassRef:
     name: default

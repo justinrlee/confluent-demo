@@ -5,7 +5,7 @@ set -x
 
 . versions.sh
 
-export MANIFEST_DIR=./cfk/oidc
+export MANIFEST_DIR=./manifests/oidc
 export LOCAL_DIR=./local
 
 tee ${LOCAL_DIR}/oauth_jaas.txt <<-'EOF'

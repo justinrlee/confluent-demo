@@ -1,9 +1,15 @@
 #!/bin/bash
 
+set -e
+set -x
+
 . versions.sh
 
-export CERT_DIR=./local/certs
-export CFSSL_DIR=./local/cfssl
+export MANIFEST_DIR=./manifests/keycloak
+export LOCAL_DIR=./local
+
+export CERT_DIR=${LOCAL_DIR}/certs
+export CFSSL_DIR=${LOCAL_DIR}/cfssl
 mkdir -p $CERT_DIR $CFSSL_DIR
 
 cp ./assets/ca.crt ${CERT_DIR}/ca.crt
@@ -22,7 +28,7 @@ cfssl gencert \
     -profile server \
     ${CFSSL_DIR}/${RESOURCE}.json | cfssljson -bare ${CERT_DIR}/${RESOURCE}
 
-kubectl -n default create secret tls tls-keycloak --cert=local/certs/keycloak.pem --key=local/certs/keycloak-key.pem --dry-run=client -oyaml --save-config | kubectl apply -f -
+kubectl -n ${KEYCLOAK_NAMESPACE} create secret tls tls-keycloak --cert=${CERTS_DIR}/keycloak.pem --key=${CERTS_DIR}/keycloak-key.pem --dry-run=client -oyaml --save-config | kubectl apply -f -
 
 helm upgrade --install ingress-nginx \
     ingress-nginx/ingress-nginx \
@@ -30,5 +36,10 @@ helm upgrade --install ingress-nginx \
     --set "controller.extraArgs.enable-ssl-passthrough=" \
     --version ${INGRESS_NGINX_VERSION}
 
-kubectl apply -f cfk/keycloak/keycloak.yaml
-kubectl apply -f cfk/keycloak/keycloak-ingress.yaml
+for f in \
+    $(ls -1 ${MANIFEST_DIR})
+do
+    echo ${f}
+    envsubst < ${MANIFEST_DIR}/${f} > ${LOCAL_DIR}/${f}
+    kubectl apply -f ${LOCAL_DIR}/${f}
+done
