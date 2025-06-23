@@ -50,11 +50,13 @@ helm upgrade --install cp-flink-kubernetes-operator \
     confluentinc/flink-kubernetes-operator \
     --set operatorPod.resources.requests.cpu=1 \
     --set operatorPod.resources.requests.memory=1Gi \
-    --namespace ${NAMESPACE}
+    --namespace ${NAMESPACE} \
+    --version ${FKO_VERSION}
 
 helm upgrade --install cmf \
     confluentinc/confluent-manager-for-apache-flink \
-    --namespace ${NAMESPACE}
+    --namespace ${NAMESPACE} \
+    --version ${CMF_VERSION}
 
 ########################################################
 # Create certificates

@@ -1,8 +1,10 @@
-export CFK_CHART_VERSION=0.1193.34
+export CFK_CHART_VERSION=0.1193.47
 export CFK_INIT_CONTAINER_VERSION=2.11.1
 export CONFLUENT_PLATFORM_VERSION=7.9.1
 export CONTROL_CENTER_VERSION=2.1.0
 export INGRESS_NGINX_VERSION=4.10.6
+export CMF_VERSION=1.1.0
+export FKO_VERSION=1.120.1
 
 # Use confluent-demo namespace to not interfere with things in confluent namespace
 export NAMESPACE=confluent-demo
