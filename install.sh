@@ -44,8 +44,12 @@ do
     sleep 10
 done
 
+sleep 10
+
 helm upgrade --install cp-flink-kubernetes-operator \
     confluentinc/flink-kubernetes-operator \
+    --set operatorPod.resources.requests.cpu=1 \
+    --set operatorPod.resources.requests.memory=1Gi \
     --namespace ${NAMESPACE}
 
 helm upgrade --install cmf \
