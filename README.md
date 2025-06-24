@@ -6,7 +6,7 @@ This runs a small Confluent Platform cluster on a local workstation, using Docke
 
 There are two versions:
 
-1. 'simple' mode - uses LDAP (OpenLDAP) for authentication/authorization, is maybe 80% functionally complete, although the demo needs to be fleshed out
+1. 'ldap' mode - uses LDAP (OpenLDAP) for authentication/authorization, is maybe 80% functionally complete, although the demo needs to be fleshed out
 2. 'oidc' mode - uses OIDC/OAuth2.0 (Keycloak) for authentication, is maybe 30% functionally complete
 
 Architecturally, this will deploy:
@@ -39,16 +39,62 @@ Check prereqs:
 ./check_prereqs.sh
 ```
 
-Install "infra" stuff
+## Recommended: OIDC Demo
 
 ```bash
-./install.sh
+./deploy_infra.sh
 ```
 
-Deploy manifests
+Install Keycloak
 
 ```bash
-./deploy_simple_manifests.sh
+./deploy_infra_keycloak.sh
+```
+
+Deploy OIDC (keycloak-based) demo:
+
+```bash
+./deploy_oidc_demo.sh
+```
+
+Monitor pods as they come up (need Control Center to be 3/3); may take some time
+
+```bash
+kubectl -n confluent-demo get pods -w
+```
+
+(You can also monitor C3 logs with `kubectl -n confluent-demo logs -f controlcenter-0 -c controlcenter`)
+
+Open up control center: https://confluent.127-0-0-1.nip.io/
+
+Log in with `admin`/`admin`
+
+... Poke around?
+
+WHen you're done, uninstall:
+
+```bash
+./remove_oidc_demo.sh
+./remove_infra_keycloak.sh
+./remove_infra.sh
+```
+
+## Alternate: LDAP Demo
+
+```bash
+./deploy_infra.sh
+```
+
+Install Keycloak
+
+```bash
+./deploy_infra_ldap.sh
+```
+
+Deploy OIDC (keycloak-based) demo:
+
+```bash
+./deploy_ldap_demo.sh
 ```
 
 Monitor pods as they come up (need Control Center to be 3/3); may take some time
@@ -68,23 +114,15 @@ Log in with `kafka`/`kafka-secret`
 WHen you're done, uninstall:
 
 ```bash
-./uninstall.sh
+./remove_ldap_demo.sh
+./remove_infra_ldap.sh
+./remove_infra.sh
 ```
 
-Refactoring:
-* check_prereqs.sh
-* deploy_infra.sh
-* deploy_ldap_server.sh
-* deploy_keycloak_server.sh
-* deploy_ldap_demo.sh
-* deploy_oidc_demo.sh
-* remove_ldap_demo.sh
-* remove_oidc_demo.sh
-* remove_ldap_server.sh
-* remove_oidc_demo.sh
-* remove_infra.sh
- 
+## TODO
+
 TODO (Repo)
+* Update to 8.0.0 (CP and CPF/CMF)
 * lots of refactoring
     * rearrange installation / uninstallation scripts to use functions
     * paramaterize ldap namespace
@@ -93,13 +131,12 @@ TODO (Repo)
 * figure out how to remove cert-manager
 * tune resources (requirements and limits) to work better locally
 
-TODO (Simple)
+TODO (ldap)
 * replace harcoded LDAP container with generic parameterized one
 * use distinct credentials for different services (right now everything uses `kafka/kafka-secret`)
 
 TODO (oidc)
-* get everything else working
-* get SSO working
+* use distinct credentials for different services
 * create other credentials
 * automate keycloak
 * add FlinkEnvironment/FlinkApplication authentication/authorization

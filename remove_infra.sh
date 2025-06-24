@@ -6,6 +6,7 @@
 . ./versions.sh
 . ./functions.sh
 
+# TODO: Clean this up
 kubectl -n ${NAMESPACE} delete \
     secret \
         admin-ldap-client \
