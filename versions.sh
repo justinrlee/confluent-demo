@@ -13,3 +13,5 @@ export OPERATOR_NAMESPACE=confluent-demo
 export FLINK_ENVIRONMENT_NAME=demo
 
 export KEYCLOAK_NAMESPACE=keycloak
+
+export LOCAL_DIR=./local

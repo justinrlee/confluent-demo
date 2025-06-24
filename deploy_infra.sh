@@ -13,18 +13,23 @@ helm repo update
 
 # Create namespaces if they don't exist
 kubectl create namespace ${NAMESPACE} --dry-run=client -oyaml | kubectl apply -f -
-# kubectl create namespace ${INGRESS_NGINX_NAMESPACE} --dry-run=client -oyaml | kubectl apply -f -
+kubectl create namespace ${KEYCLOAK_NAMESPACE} --dry-run=client -oyaml | kubectl apply -f -
+kubectl create namespace ${INGRESS_NGINX_NAMESPACE} --dry-run=client -oyaml | kubectl apply -f -
 
-kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.8.2/cert-manager.yaml
+# Deploy cert-manager
+deploy_manifests ./manifests/cert-manager
 
-# Install Ingress Nginx
+wait_for_cert_manager
+
+##### Helm deploys
+# Ingress NGINX
 helm upgrade --install ingress-nginx \
     ingress-nginx/ingress-nginx \
     --namespace ${INGRESS_NGINX_NAMESPACE} \
     --set "controller.extraArgs.enable-ssl-passthrough=" \
     --version ${INGRESS_NGINX_VERSION}
 
-# Install Confluent for Kubernetes
+# CFK
 helm upgrade --install confluent-for-kubernetes \
     confluentinc/confluent-for-kubernetes \
     --namespace ${OPERATOR_NAMESPACE} \
@@ -32,33 +37,21 @@ helm upgrade --install confluent-for-kubernetes \
     --set enableCMFDay2Ops=true \
     --version ${CFK_CHART_VERSION}
 
-while [[ $(kubectl -n cert-manager get pods -l app.kubernetes.io/instance=cert-manager | grep '1/1' | wc -l) -lt 3 ]];
-do
-    echo "Waiting for cert-manager pods to start"
-    sleep 10
-done
-
-while [[ $(kubectl -n cert-manager logs --tail=-1 -l app.kubernetes.io/instance=cert-manager  | grep "success.*controller" | wc -l ) -lt 1 ]];
-do
-    echo "Waiting for cert-manager to be ready"
-    sleep 10
-done
-
-sleep 10
-
+# FKO
+## Depends on cert-manager
 helm upgrade --install cp-flink-kubernetes-operator \
     confluentinc/flink-kubernetes-operator \
     --set operatorPod.resources.requests.cpu=100m \
     --namespace ${NAMESPACE} \
     --version ${FKO_VERSION}
 
+# CMF
 helm upgrade --install cmf \
     confluentinc/confluent-manager-for-apache-flink \
     --set resources.requests.cpu=100m \
     --namespace ${NAMESPACE} \
     --version ${CMF_VERSION}
 
-########################################################
 # Create certificates
 export CERT_DIR=./local/certs
 export CFSSL_DIR=./local/cfssl
@@ -137,11 +130,4 @@ kubectl create secret generic mds-token \
     --dry-run=client \
     -oyaml | kubectl apply -f -
 
-########################################################
-
-# TODO: Wait for CFK to be ready
-while [[ $(kubectl -n ${OPERATOR_NAMESPACE} get pods -l app=confluent-operator | grep "1/1" | wc -l ) -lt 1 ]]; 
-do
-    echo "Waiting for CFK to be ready..."
-    sleep 10
-done
+wait_for_cfk

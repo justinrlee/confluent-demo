@@ -71,10 +71,23 @@ WHen you're done, uninstall:
 ./uninstall.sh
 ```
 
+Refactoring:
+* check_prereqs.sh
+* deploy_infra.sh
+* deploy_ldap_server.sh
+* deploy_keycloak_server.sh
+* deploy_ldap_demo.sh
+* deploy_oidc_demo.sh
+* remove_ldap_demo.sh
+* remove_oidc_demo.sh
+* remove_ldap_server.sh
+* remove_oidc_demo.sh
+* remove_infra.sh
  
 TODO (Repo)
 * lots of refactoring
     * rearrange installation / uninstallation scripts to use functions
+    * paramaterize ldap namespace
 * lots of documentation
 * look at gateway API
 * figure out how to remove cert-manager

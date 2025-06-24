@@ -7,7 +7,6 @@ set -x
 . ./functions.sh
 
 export MANIFEST_DIR=./manifests/oidc
-export LOCAL_DIR=./local
 
 tee ${LOCAL_DIR}/oauth_jaas.txt <<-'EOF'
 clientId=kafka
@@ -18,7 +17,6 @@ tee ${LOCAL_DIR}/controlcenter_oauth_jaas.txt <<-'EOF'
 clientId=controlcenter
 clientSecret=Wyt2jq5gzqrONotJ4W7R07OA4yUnnj3l
 EOF
-
 
 kubectl create -n ${NAMESPACE} secret generic \
     oauth-jaas \
@@ -36,14 +34,6 @@ kubectl create -n ${NAMESPACE} secret generic \
     > ${LOCAL_DIR}/controlcenter-oauth-jaas.yaml
 kubectl apply -f ${LOCAL_DIR}/controlcenter-oauth-jaas.yaml
 
-ls -1 ${MANIFEST_DIR} | grep yaml
-
-for f in \
-    $(ls -1 ${MANIFEST_DIR} | grep yaml)
-do
-    echo ${f}
-    envsubst < ${MANIFEST_DIR}/${f} > ${LOCAL_DIR}/${f}
-    kubectl apply -f ${LOCAL_DIR}/${f}
-done
+deploy_manifests ${MANIFEST_DIR}
 
 wait_for_c3

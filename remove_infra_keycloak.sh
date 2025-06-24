@@ -4,7 +4,9 @@
 # set -x
 
 . ./versions.sh
+. ./functions.sh
 
+# From manifests
 kubectl -n ${KEYCLOAK_NAMESPACE} delete \
     ingress/keycloak \
     ingress/keycloak-insecure \
@@ -15,5 +17,10 @@ kubectl -n ${KEYCLOAK_NAMESPACE} delete \
     service/postgres
 
 sleep 10
+
+# Manually created
+kubectl -n ${KEYCLOAK_NAMESPACE} delete \
+    secret/tls-keycloak \
+    configmap/keycloak-realm
 
 kubectl delete namespace ${KEYCLOAK_NAMESPACE}

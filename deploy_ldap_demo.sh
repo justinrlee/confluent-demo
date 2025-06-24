@@ -3,10 +3,10 @@
 set -e
 set -x
 
-. versions.sh
+. ./versions.sh
+. ./functions.sh
 
 export MANIFEST_DIR=./manifests/simple
-export LOCAL_DIR=./local
 
 kubectl -n ${NAMESPACE} create secret generic kafka-ldap-client \
         --from-file=plain-interbroker.txt=./assets/kafka-plain.txt \
@@ -40,22 +40,6 @@ kubectl -n ${NAMESPACE} create secret generic rest-client \
     --dry-run=client -oyaml --save-config > ${LOCAL_DIR}/secret-rest-client.yaml
 kubectl apply -f ${LOCAL_DIR}/secret-rest-client.yaml
 
-ls -1 ${MANIFEST_DIR}
+deploy_manifests ${MANIFEST_DIR}
 
-for f in \
-    $(ls -1 ${MANIFEST_DIR})
-do
-    echo ${f}
-    envsubst < ${MANIFEST_DIR}/${f} > ${LOCAL_DIR}/${f}
-    kubectl apply -f ${LOCAL_DIR}/${f}
-done
-
-while [[ $(kubectl -n ${NAMESPACE} get pods -l app=controlcenter | grep '3/3' | wc -l) -lt 1 ]];
-do
-    echo "Waiting for ControlCenter pod to be ready"
-    kubectl -n ${NAMESPACE} get pods
-    echo ''
-    sleep 5
-done
-
-echo 'Access at "https://confluent.127-0-0-1.nip.io"'
+wait_for_c3

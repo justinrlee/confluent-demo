@@ -3,10 +3,10 @@
 set -e
 set -x
 
-. versions.sh
+. ./versions.sh
+. ./functions.sh
 
 export MANIFEST_DIR=./manifests/keycloak
-export LOCAL_DIR=./local
 
 export CERT_DIR=${LOCAL_DIR}/certs
 export CFSSL_DIR=${LOCAL_DIR}/cfssl
@@ -14,6 +14,7 @@ mkdir -p $CERT_DIR $CFSSL_DIR
 
 kubectl create namespace ${KEYCLOAK_NAMESPACE} --dry-run=client -oyaml | kubectl apply -f -
 
+## Deploy manifests
 cp ./assets/ca.crt ${CERT_DIR}/ca.crt
 cp ./assets/ca.key ${CERT_DIR}/ca.key
 cp ./assets/cfssl-ca.json ${CFSSL_DIR}/cfssl-ca.json
@@ -38,25 +39,10 @@ kubectl -n ${KEYCLOAK_NAMESPACE} create secret tls tls-keycloak \
         --dry-run=client -oyaml --save-config \
     | kubectl apply -f -
 
-# helm upgrade --install ingress-nginx \
-#     ingress-nginx/ingress-nginx \
-#     --namespace ${INGRESS_NGINX_NAMESPACE} \
-#     --set "controller.extraArgs.enable-ssl-passthrough=" \
-#     --version ${INGRESS_NGINX_VERSION}
-
-echo "doing manifests"
-
+# Populating keycloak realm configmap
 kubectl -n ${KEYCLOAK_NAMESPACE} create configmap keycloak-realm \
         --from-file=realm.json=${MANIFEST_DIR}/realm.json \
         --dry-run=client -oyaml --save-config \
     | kubectl apply -f -
 
-ls -1 ${MANIFEST_DIR} | grep yaml
-
-for f in \
-    $(ls -1 ${MANIFEST_DIR} | grep yaml)
-do
-    echo ${f}
-    envsubst < ${MANIFEST_DIR}/${f} > ${LOCAL_DIR}/${f}
-    kubectl apply -f ${LOCAL_DIR}/${f}
-done
+deploy_manifests ${MANIFEST_DIR}
