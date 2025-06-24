@@ -9,10 +9,10 @@ There are two versions:
 1. 'ldap' mode - uses LDAP (OpenLDAP) for authentication/authorization, is maybe 80% functionally complete, although the demo needs to be fleshed out
 2. 'oidc' mode - uses OIDC/OAuth2.0 (Keycloak) for authentication, is maybe 30% functionally complete
 
-Architecturally, this will deploy:
+Functionally, this will deploy the following:
 
 * Ingress NGINX Controller (should probably be replaced with Gateway API)
-* LDAP and/or Keycloak
+* LDAP and/or Keycloak pod
 * Confluent for Kubernetes (CFK)
 * CFK CRs:
     * 1x KRaft
@@ -29,23 +29,30 @@ Architecturally, this will deploy:
  
 Instruction:
 
-* Install Docker Desktop, and enable built-in Kubernetes (I'm using KIND, but it shouldn't matter what type you use)
-    * I've given Docker Desktop 6 cores and 16GB of memory; need to do testing to see how small we can trim this
-* Install `brew`, `helm`, `openssl`, `cfssl`
+* Install Docker Desktop
+* Enable Docker Desktop's built-in Kubernetes (I'm using KIND, but Kubeadm should also work)
+* Configure Docker Desktop with at least 6 cores and 16 GB of memory
+* Install the following:
+    * `brew`
+    * `openssl`
+    * `helm`
+    * `cfssl` - Used for certificate generation
 
-Check prereqs:
+### Check Prerequisites
 
 ```bash
 ./check_prereqs.sh
 ```
 
-## Recommended: OIDC Demo
+## Installation: OIDC Demo (Recommended)
+
+Deploy infrastructure (CFK, CMF, FKO, Ingress-NGINX Ingress Controller, various certificates)
 
 ```bash
 ./deploy_infra.sh
 ```
 
-Install Keycloak
+Deploy Keycloak
 
 ```bash
 ./deploy_infra_keycloak.sh
@@ -57,7 +64,7 @@ Deploy OIDC (keycloak-based) demo:
 ./deploy_oidc_demo.sh
 ```
 
-Monitor pods as they come up (need Control Center to be 3/3); may take some time
+Monitor pods as they come up (need Control Center to have 3/3 running containers); this may take some time to start.
 
 ```bash
 kubectl -n confluent-demo get pods -w
@@ -65,13 +72,13 @@ kubectl -n confluent-demo get pods -w
 
 (You can also monitor C3 logs with `kubectl -n confluent-demo logs -f controlcenter-0 -c controlcenter`)
 
-Open up control center: https://confluent.127-0-0-1.nip.io/
+Open up the control center UI: https://confluent.127-0-0-1.nip.io/
 
 Log in with `admin`/`admin`
 
 ... Poke around?
 
-WHen you're done, uninstall:
+### Cleanup
 
 ```bash
 ./remove_oidc_demo.sh
@@ -79,7 +86,7 @@ WHen you're done, uninstall:
 ./remove_infra.sh
 ```
 
-## Alternate: LDAP Demo
+## Installation: LDAP Demo (Alternate option)
 
 ```bash
 ./deploy_infra.sh
@@ -111,7 +118,7 @@ Log in with `kafka`/`kafka-secret`
 
 ... Poke around?
 
-WHen you're done, uninstall:
+### Cleanup
 
 ```bash
 ./remove_ldap_demo.sh
@@ -122,7 +129,7 @@ WHen you're done, uninstall:
 ## TODO
 
 TODO (Repo)
-* Update to 8.0.0 (CP and CPF/CMF)
+* ~~Update to 8.0.0 (CP and CPF/CMF)~~
 * lots of refactoring
     * rearrange installation / uninstallation scripts to use functions
     * paramaterize ldap namespace
@@ -143,5 +150,5 @@ TODO (oidc)
 
 TODO (demo)
 * Add connectors (and plugins) - shoe store
-* Add real FLink job
+* Add real Flink job
 * ... other demo things?
