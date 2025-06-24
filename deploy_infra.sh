@@ -45,10 +45,20 @@ helm upgrade --install cp-flink-kubernetes-operator \
     --namespace ${NAMESPACE} \
     --version ${FKO_VERSION}
 
+openssl rand -out ${LOCAL_DIR}/cmf.key 32
+
+kubectl create secret generic cmf-encryption-key \
+        --from-file=encryption-key=${LOCAL_DIR}/cmf.key \
+        --namespace ${NAMESPACE} \
+        --dry-run=client -oyaml --save-config \
+    | kubectl apply -f -
+
 # CMF
 helm upgrade --install cmf \
     confluentinc/confluent-manager-for-apache-flink \
     --set resources.requests.cpu=100m \
+    --set encryption.key.kubernetesSecretName=cmf-encryption-key \
+    --set encryption.key.kubernetesSecretProperty=encryption-key \
     --namespace ${NAMESPACE} \
     --version ${CMF_VERSION}
 
