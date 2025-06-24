@@ -412,7 +412,7 @@
           "attributes": {}
         }
       ],
-      "controlcenter": [
+      "confluent-sso": [
         {
           "id": "d3a7bd6f-c86b-422b-9b30-31dd441eaa47",
           "name": "uma_protection",
@@ -490,19 +490,19 @@
   "users": [
     {
       "id": "c8160a5e-cbf0-474f-b481-4a1b9a415431",
-      "username": "service-account-controlcenter",
+      "username": "service-account-confluent-sso",
       "emailVerified": false,
       "createdTimestamp": 1750746948968,
       "enabled": true,
       "totp": false,
-      "serviceAccountClientId": "controlcenter",
+      "serviceAccountClientId": "confluent-sso",
       "disableableCredentialTypes": [],
       "requiredActions": [],
       "realmRoles": [
         "default-roles-confluent"
       ],
       "clientRoles": {
-        "controlcenter": [
+        "confluent-sso": [
           "uma_protection"
         ]
       },
@@ -531,25 +531,25 @@
       "groups": []
     },
     {
-        "username": "admin",
-        "enabled": true,
-        "emailVerified": true,
-        "firstName": "admin",
-        "lastName": "admin",
-        "email": "admin@example.com",
-        "credentials": [
-          {
-            "type": "password",
-            "value": "admin"
-          }
-        ],
-        "realmRoles": [
-          "default-roles-confluent"
-        ],
-        "groups": [
-          "/administrators"
-        ]
-      }
+      "username": "admin",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "admin",
+      "lastName": "admin",
+      "email": "admin@example.com",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "admin"
+        }
+      ],
+      "realmRoles": [
+        "default-roles-confluent"
+      ],
+      "groups": [
+        "/administrators"
+      ]
+    }
   ],
   "scopeMappings": [
     {
@@ -763,7 +763,7 @@
     },
     {
       "id": "7ed5e488-ebbe-4982-8687-6e65e34872fb",
-      "clientId": "controlcenter",
+      "clientId": "confluent-sso",
       "name": "",
       "description": "",
       "rootUrl": "https://confluent.127-0-0-1.nip.io",
@@ -843,7 +843,7 @@
         "resources": [
           {
             "name": "Default Resource",
-            "type": "urn:controlcenter:resources:default",
+            "type": "urn:confluent-sso:resources:default",
             "ownerManagedAccess": false,
             "attributes": {},
             "uris": [

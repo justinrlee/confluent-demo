@@ -79,7 +79,7 @@ spec:
         sso:
           enabled: true
           clientCredentials:
-            secretRef: controlcenter-oauth-jaas
+            secretRef: sso-oauth-jaas
           configurations:
             groupsClaimName: groups
             subClaimName: sub
