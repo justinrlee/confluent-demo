@@ -11,4 +11,4 @@ spec:
       oauth:
         secretRef: oauth-jaas
         configuration:
-          tokenEndpointUri: http://keycloak.default:8080/realms/confluent/protocol/openid-connect/token
+          tokenEndpointUri: http://keycloak.${KEYCLOAK_NAMESPACE}.svc.cluster.local:8080/realms/confluent/protocol/openid-connect/token

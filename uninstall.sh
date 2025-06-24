@@ -100,5 +100,3 @@ kubectl delete -f https://github.com/jetstack/cert-manager/releases/download/v1.
 sleep 10
 
 kubectl delete namespace ${NAMESPACE}
-
-# TODO: Uninstall nginx

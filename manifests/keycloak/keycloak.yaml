@@ -26,6 +26,7 @@ metadata:
     app: keycloak
   # Used to
   name: keycloak-discovery
+  namespace: ${KEYCLOAK_NAMESPACE}
 spec:
   selector:
     app: keycloak
@@ -40,6 +41,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: keycloak
+  namespace: ${KEYCLOAK_NAMESPACE}
   labels:
     app: keycloak
 spec:
@@ -149,6 +151,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: postgres
+  namespace: ${KEYCLOAK_NAMESPACE}
   labels:
     app: postgres
 spec:
@@ -190,6 +193,7 @@ metadata:
   labels:
     app: postgres
   name: postgres
+  namespace: ${KEYCLOAK_NAMESPACE}
 spec:
   selector:
     app: postgres

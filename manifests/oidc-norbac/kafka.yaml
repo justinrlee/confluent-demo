@@ -49,12 +49,12 @@ spec:
         type: oauth
         jaasConfig:
           secretRef: oauth-jaas
-        # https://keycloak.default:8443//realms/confluent/.well-known/openid-configuration
+        # https://keycloak.${KEYCLOAK_NAMESPACE}.svc.cluster.local:8443//realms/confluent/.well-known/openid-configuration
         oauthSettings:
           subClaimName: client_id
-          expectedIssuer: http://keycloak.default:8080/realms/confluent
-          jwksEndpointUri: http://keycloak.default:8080/realms/confluent/protocol/openid-connect/certs
-          tokenEndpointUri: http://keycloak.default:8080/realms/confluent/protocol/openid-connect/token
+          expectedIssuer: http://keycloak.${KEYCLOAK_NAMESPACE}.svc.cluster.local:8080/realms/confluent
+          jwksEndpointUri: http://keycloak.${KEYCLOAK_NAMESPACE}.svc.cluster.local:8080/realms/confluent/protocol/openid-connect/certs
+          tokenEndpointUri: http://keycloak.${KEYCLOAK_NAMESPACE}.svc.cluster.local:8080/realms/confluent/protocol/openid-connect/token
       tls:
         enabled: true
     # REPLICATION: 9072 (mTLS)

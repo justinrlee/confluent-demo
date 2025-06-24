@@ -74,6 +74,7 @@ WHen you're done, uninstall:
  
 TODO (Repo)
 * lots of refactoring
+    * rearrange installation / uninstallation scripts to use functions
 * lots of documentation
 * look at gateway API
 * figure out how to remove cert-manager

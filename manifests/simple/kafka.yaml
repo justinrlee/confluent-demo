@@ -22,23 +22,18 @@ spec:
   image:
     application: confluentinc/cp-server:${CONFLUENT_PLATFORM_VERSION}
     init: confluentinc/confluent-init-container:${CFK_INIT_CONTAINER_VERSION}
-  #   init: justinrlee/confluent-init-container:2.11.0-r1
-  # podTemplate:
-  #   envVars:
-  #   - name: T_REPAIR_MODE
-  #     value: kafka-0
   dataVolumeCapacity: 5Gi
   listeners:
+    # 9071 (PLAIN LDAP)
     internal:
-      # 9071 (PLAIN LDAP)
       authentication:
         type: ldap
         jaasConfig:
           secretRef: kafka-ldap-client
       tls:
         enabled: true
+    # 9092 (PLAIN LDAP)
     external:
-      # 9092 (PLAIN LDAP)
       externalAccess:
         type: staticForHostBasedRouting
         staticForHostBasedRouting:
@@ -46,13 +41,13 @@ spec:
           domain: 127-0-0-1.nip.io
           brokerPrefix: kafka-
       authentication:
+        type: ldap
         jaasConfig:
           secretRef: kafka-ldap-client
-        type: ldap
       tls:
         enabled: true
+    # 9072 (mTLS)
     replication:
-      # 9072 (mTLS)
       authentication:
         mtls:
           sslClientAuthentication: required
@@ -91,11 +86,14 @@ spec:
       tokenKeyPair:
         secretRef: mds-token
   dependencies:
-    metricsClient:
-      url: https://controlcenter.${NAMESPACE}.svc.cluster.local:9090
-      tls:
-        enabled: true
-        secretRef: tls-controlcenter
+    kRaftController:
+      controllerListener:
+        tls:
+          enabled: true
+        authentication:
+          type: mtls
+      clusterRef:
+        name: kraft
     kafkaRest:
       authentication:
         bearer:
@@ -104,16 +102,11 @@ spec:
       # tls:
       #   enabled: true
       #   secretRef: tls-kafka
-    kRaftController:
-      controllerListener:
-        tls:
-          enabled: true
-        authentication:
-          # mtls:
-          #   sslClientAuthentication: required
-          type: mtls
-      clusterRef:
-        name: kraft
+    metricsClient:
+      url: https://controlcenter.${NAMESPACE}.svc.cluster.local:9090
+      tls:
+        enabled: true
+        secretRef: tls-controlcenter
     schemaRegistry:
       authentication:
         type: basic

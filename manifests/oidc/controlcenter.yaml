@@ -29,9 +29,9 @@ spec:
         oauth:
           secretRef: oauth-jaas
           configuration:
-            tokenEndpointUri: http://keycloak.default:8080/realms/confluent/protocol/openid-connect/token
-            expectedIssuer: http://keycloak.default:8080/realms/confluent
-            jwksEndpointUri: http://keycloak.default:8080/realms/confluent/protocol/openid-connect/certs
+            tokenEndpointUri: http://keycloak.${KEYCLOAK_NAMESPACE}.svc.cluster.local:8080/realms/confluent/protocol/openid-connect/token
+            expectedIssuer: http://keycloak.${KEYCLOAK_NAMESPACE}.svc.cluster.local:8080/realms/confluent
+            jwksEndpointUri: http://keycloak.${KEYCLOAK_NAMESPACE}.svc.cluster.local:8080/realms/confluent/protocol/openid-connect/certs
             subClaimName: client_id
       tls:
         enabled: true
@@ -53,7 +53,7 @@ spec:
           secretRef: oauth-jaas
         oauthSettings:
           subClaimName: client_id
-          tokenEndpointUri: http://keycloak.default:8080/realms/confluent/protocol/openid-connect/token
+          tokenEndpointUri: http://keycloak.${KEYCLOAK_NAMESPACE}.svc.cluster.local:8080/realms/confluent/protocol/openid-connect/token
       tls:
         enabled: true
     schemaRegistry:
@@ -62,21 +62,27 @@ spec:
         oauth:
           secretRef: oauth-jaas
           configuration:
-            tokenEndpointUri: http://keycloak.default:8080/realms/confluent/protocol/openid-connect/token
+            tokenEndpointUri: http://keycloak.${KEYCLOAK_NAMESPACE}.svc.cluster.local:8080/realms/confluent/protocol/openid-connect/token
       tls:
         enabled: true
         secretRef: tls-kraft
       url: https://schemaregistry.${NAMESPACE}.svc.cluster.local:8081
-    # connect:
-    #   - name: connect
-    #     authentication:
-    #       type: basic
-    #       basic:
-    #         secretRef: rest-client
-    #     tls:
-    #       enabled: true
-    #       secretRef: tls-kraft
-    #     url: https://connect.${NAMESPACE}.svc.cluster.local:8083
+    connect:
+      - name: connect
+        authentication:
+          type: oauth
+          oauth:
+            secretRef: oauth-jaas
+            configuration:
+              tokenEndpointUri: http://keycloak.${KEYCLOAK_NAMESPACE}.svc.cluster.local:8080/realms/confluent/protocol/openid-connect/token
+        # authentication:
+        #   type: basic
+        #   basic:
+        #     secretRef: rest-client
+        tls:
+          enabled: true
+          secretRef: tls-kraft
+        url: https://connect.${NAMESPACE}.svc.cluster.local:8083
   services:
     prometheus:
       image: confluentinc/cp-enterprise-prometheus:${CONTROL_CENTER_VERSION}
