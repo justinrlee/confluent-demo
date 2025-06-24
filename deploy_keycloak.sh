@@ -32,18 +32,29 @@ cfssl gencert \
     -profile server \
     ${CFSSL_DIR}/${RESOURCE}.json | cfssljson -bare ${CERT_DIR}/${RESOURCE}
 
-kubectl -n ${KEYCLOAK_NAMESPACE} create secret tls tls-keycloak --cert=${CERT_DIR}/keycloak.pem --key=${CERT_DIR}/keycloak-key.pem --dry-run=client -oyaml --save-config | kubectl apply -f -
+kubectl -n ${KEYCLOAK_NAMESPACE} create secret tls tls-keycloak \
+        --cert=${CERT_DIR}/keycloak.pem \
+        --key=${CERT_DIR}/keycloak-key.pem \
+        --dry-run=client -oyaml --save-config \
+    | kubectl apply -f -
 
-helm upgrade --install ingress-nginx \
-    ingress-nginx/ingress-nginx \
-    --namespace ${INGRESS_NGINX_NAMESPACE} \
-    --set "controller.extraArgs.enable-ssl-passthrough=" \
-    --version ${INGRESS_NGINX_VERSION}
+# helm upgrade --install ingress-nginx \
+#     ingress-nginx/ingress-nginx \
+#     --namespace ${INGRESS_NGINX_NAMESPACE} \
+#     --set "controller.extraArgs.enable-ssl-passthrough=" \
+#     --version ${INGRESS_NGINX_VERSION}
 
 echo "doing manifests"
 
+kubectl -n ${KEYCLOAK_NAMESPACE} create configmap keycloak-realm \
+        --from-file=realm.json=${MANIFEST_DIR}/realm.json \
+        --dry-run=client -oyaml --save-config \
+    | kubectl apply -f -
+
+ls -1 ${MANIFEST_DIR} | grep yaml
+
 for f in \
-    $(ls -1 ${MANIFEST_DIR})
+    $(ls -1 ${MANIFEST_DIR} | grep yaml)
 do
     echo ${f}
     envsubst < ${MANIFEST_DIR}/${f} > ${LOCAL_DIR}/${f}

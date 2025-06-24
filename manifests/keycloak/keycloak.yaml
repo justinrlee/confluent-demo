@@ -59,7 +59,8 @@ spec:
       containers:
         - name: keycloak
           image: quay.io/keycloak/keycloak:26.2.5
-          args: ["start"]
+          # args: ["start"]
+          args: ["start", "--import-realm"]
           env:
             - name: KC_BOOTSTRAP_ADMIN_USERNAME
               value: "admin"
@@ -140,10 +141,15 @@ spec:
             # Using volume mount for PostgreSQL's data folder as it is otherwise not writable
             - name: tls-keycloak
               mountPath: /opt/keycloak/conf/certs
+            - name: keycloak-realm
+              mountPath: /opt/keycloak/data/import
       volumes:
         - name: tls-keycloak
           secret:
             secretName: tls-keycloak
+        - name: keycloak-realm
+          configMap:
+            name: keycloak-realm
 ---
 # This is deployment of PostgreSQL with an ephemeral storage for testing: Once the Pod stops, the data is lost.
 # For a production setup, replace it with a database setup that persists your data.

@@ -3,7 +3,8 @@
 set -e
 set -x
 
-. versions.sh
+. ./versions.sh
+. ./functions.sh
 
 export MANIFEST_DIR=./manifests/oidc
 export LOCAL_DIR=./local
@@ -44,3 +45,5 @@ do
     envsubst < ${MANIFEST_DIR}/${f} > ${LOCAL_DIR}/${f}
     kubectl apply -f ${LOCAL_DIR}/${f}
 done
+
+wait_for_c3
