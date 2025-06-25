@@ -11,6 +11,14 @@ spec:
     init: confluentinc/confluent-init-container:${CFK_INIT_CONTAINER_VERSION}
   authorization:
     type: rbac
+  build:
+    type: onDemand
+    onDemand:
+      plugins:
+        confluentHub:
+          - name: kafka-connect-datagen
+            owner: confluentinc
+            version: 0.6.6
   tls:
     secretRef: tls-connect
   authentication:
@@ -47,3 +55,27 @@ spec:
             subClaimName: client_id
       tls:
         enabled: true
+    schemaRegistry:
+      authentication:
+        type: oauth
+        oauth:
+          secretRef: connect-oauth-jaas
+          configuration:
+            tokenEndpointUri: http://keycloak.${KEYCLOAK_NAMESPACE}.svc.cluster.local:8080/realms/confluent/protocol/openid-connect/token
+      tls:
+        enabled: true
+        secretRef: tls-kraft
+      url: https://schemaregistry.${NAMESPACE}.svc.cluster.local:8081
+---
+apiVersion: platform.confluent.io/v1beta1
+kind: ConfluentRolebinding
+metadata:
+  name: manual-connect-sr
+  namespace: ${NAMESPACE}
+spec:
+  clustersScopeByIds:
+    schemaRegistryClusterId: id_schemaregistry_confluent-demo
+  principal:
+    name: connect
+    type: user
+  role: SystemAdmin

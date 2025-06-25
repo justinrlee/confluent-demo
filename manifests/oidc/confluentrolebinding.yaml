@@ -6,8 +6,6 @@ metadata:
   namespace: ${NAMESPACE}
 spec:
   principal:
-    # name: 8b0e6985-da9a-49d2-9205-fcf4735c81f4
-    # type: user
     name: "/administrators"
     type: group
   role: SystemAdmin
@@ -36,4 +34,41 @@ spec:
   principal:
     name: "/administrators"
     type: group
+  role: SystemAdmin
+---
+apiVersion: platform.confluent.io/v1beta1
+kind: ConfluentRolebinding
+metadata:
+  name: manual-controlcenter
+  namespace: ${NAMESPACE}
+spec:
+  principal:
+    name: controlcenter
+    type: user
+  role: SystemAdmin
+---
+apiVersion: platform.confluent.io/v1beta1
+kind: ConfluentRolebinding
+metadata:
+  name: manual-controlcenter-connect
+  namespace: ${NAMESPACE}
+spec:
+  clustersScopeByIds:
+    connectClusterId: confluent-demo.connect
+  principal:
+    name: controlcenter
+    type: user
+  role: SystemAdmin
+---
+apiVersion: platform.confluent.io/v1beta1
+kind: ConfluentRolebinding
+metadata:
+  name: manual-controlcenter-sr
+  namespace: ${NAMESPACE}
+spec:
+  clustersScopeByIds:
+    schemaRegistryClusterId: id_schemaregistry_confluent-demo
+  principal:
+    name: controlcenter
+    type: user
   role: SystemAdmin
