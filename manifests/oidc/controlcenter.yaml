@@ -27,7 +27,7 @@ spec:
       authentication:
         type: oauth
         oauth:
-          secretRef: oauth-jaas
+          secretRef: controlcenter-oauth-jaas
           configuration:
             tokenEndpointUri: http://keycloak.${KEYCLOAK_NAMESPACE}.svc.cluster.local:8080/realms/confluent/protocol/openid-connect/token
             expectedIssuer: http://keycloak.${KEYCLOAK_NAMESPACE}.svc.cluster.local:8080/realms/confluent
@@ -50,7 +50,7 @@ spec:
       authentication:
         type: oauth
         jaasConfig:
-          secretRef: oauth-jaas
+          secretRef: controlcenter-oauth-jaas
         oauthSettings:
           subClaimName: client_id
           tokenEndpointUri: http://keycloak.${KEYCLOAK_NAMESPACE}.svc.cluster.local:8080/realms/confluent/protocol/openid-connect/token
@@ -60,7 +60,7 @@ spec:
       authentication:
         type: oauth
         oauth:
-          secretRef: oauth-jaas
+          secretRef: controlcenter-oauth-jaas
           configuration:
             tokenEndpointUri: http://keycloak.${KEYCLOAK_NAMESPACE}.svc.cluster.local:8080/realms/confluent/protocol/openid-connect/token
       tls:
@@ -72,7 +72,7 @@ spec:
         authentication:
           type: oauth
           oauth:
-            secretRef: oauth-jaas
+            secretRef: controlcenter-oauth-jaas
             configuration:
               tokenEndpointUri: http://keycloak.${KEYCLOAK_NAMESPACE}.svc.cluster.local:8080/realms/confluent/protocol/openid-connect/token
         # authentication:
