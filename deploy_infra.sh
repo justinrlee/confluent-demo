@@ -45,10 +45,8 @@ helm upgrade --install cp-flink-kubernetes-operator \
     --namespace ${NAMESPACE} \
     --version ${FKO_VERSION}
 
-openssl rand -out ${LOCAL_DIR}/cmf.key 32
-
 kubectl create secret generic cmf-encryption-key \
-        --from-file=encryption-key=${LOCAL_DIR}/cmf.key \
+        --from-file=encryption-key=./assets/cmf.key \
         --namespace ${NAMESPACE} \
         --dry-run=client -oyaml --save-config \
     | kubectl apply -f -
