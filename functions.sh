@@ -38,6 +38,8 @@ wait_for_cfk () {
 }
 
 deploy_manifests () {
+    mkdir -p ${LOCAL_DIR}
+
     export MANIFEST_DIR=${1}
     
     ls -1 ${MANIFEST_DIR} | grep yaml
