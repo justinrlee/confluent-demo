@@ -53,7 +53,8 @@ spec:
         # https://keycloak.${KEYCLOAK_NAMESPACE}.svc.cluster.local:8443//realms/confluent/.well-known/openid-configuration
         oauthSettings:
           subClaimName: client_id
-          expectedIssuer: http://keycloak.${KEYCLOAK_NAMESPACE}.svc.cluster.local:8080/realms/confluent
+          expectedIssuer: https://keycloak.127-0-0-1.nip.io/realms/confluent
+          # expectedIssuer: http://keycloak.${KEYCLOAK_NAMESPACE}.svc.cluster.local:8080/realms/confluent
           jwksEndpointUri: http://keycloak.${KEYCLOAK_NAMESPACE}.svc.cluster.local:8080/realms/confluent/protocol/openid-connect/certs
           tokenEndpointUri: http://keycloak.${KEYCLOAK_NAMESPACE}.svc.cluster.local:8080/realms/confluent/protocol/openid-connect/token
       tls:
@@ -76,7 +77,8 @@ spec:
         oauth:
           configurations:
             subClaimName: client_id
-            expectedIssuer: http://keycloak.${KEYCLOAK_NAMESPACE}.svc.cluster.local:8080/realms/confluent
+            expectedIssuer: https://keycloak.127-0-0-1.nip.io/realms/confluent
+            # expectedIssuer: http://keycloak.${KEYCLOAK_NAMESPACE}.svc.cluster.local:8080/realms/confluent
             jwksEndpointUri: http://keycloak.${KEYCLOAK_NAMESPACE}.svc.cluster.local:8080/realms/confluent/protocol/openid-connect/certs
 
         #sso config is required for enabling SSO for control center
@@ -112,7 +114,8 @@ spec:
           secretRef: kafka-oauth-jaas
         oauthSettings:
           subClaimName: client_id
-          expectedIssuer: http://keycloak.${KEYCLOAK_NAMESPACE}.svc.cluster.local:8080/realms/confluent
+          expectedIssuer: https://keycloak.127-0-0-1.nip.io/realms/confluent
+          # expectedIssuer: http://keycloak.${KEYCLOAK_NAMESPACE}.svc.cluster.local:8080/realms/confluent
           jwksEndpointUri: http://keycloak.${KEYCLOAK_NAMESPACE}.svc.cluster.local:8080/realms/confluent/protocol/openid-connect/certs
           tokenEndpointUri: http://keycloak.${KEYCLOAK_NAMESPACE}.svc.cluster.local:8080/realms/confluent/protocol/openid-connect/token
       # tls:
@@ -130,7 +133,8 @@ spec:
           secretRef: kafka-oauth-jaas
           configuration:
             tokenEndpointUri: http://keycloak.${KEYCLOAK_NAMESPACE}.svc.cluster.local:8080/realms/confluent/protocol/openid-connect/token
-            expectedIssuer: http://keycloak.${KEYCLOAK_NAMESPACE}.svc.cluster.local:8080/realms/confluent
+            expectedIssuer: https://keycloak.127-0-0-1.nip.io/realms/confluent
+            # expectedIssuer: http://keycloak.${KEYCLOAK_NAMESPACE}.svc.cluster.local:8080/realms/confluent
             jwksEndpointUri: http://keycloak.${KEYCLOAK_NAMESPACE}.svc.cluster.local:8080/realms/confluent/protocol/openid-connect/certs
             subClaimName: client_id
       tls:

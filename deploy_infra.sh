@@ -19,6 +19,8 @@ kubectl create namespace ${INGRESS_NGINX_NAMESPACE} --dry-run=client -oyaml | ku
 # Deploy cert-manager
 deploy_manifests ./manifests/cert-manager
 
+wait_for_cert_manager
+
 ##### Helm deploys
 # Ingress NGINX
 helm upgrade --install ingress-nginx \
@@ -36,17 +38,6 @@ helm upgrade --install confluent-for-kubernetes \
     --set namespaceList=\{"${NAMESPACE}","${OPERATOR_NAMESPACE}"\} \
     --version ${CFK_CHART_VERSION}
 
-wait_for_cert_manager
-
-# FKO
-## Depends on cert-manager
-helm upgrade --install cp-flink-kubernetes-operator \
-    confluentinc/flink-kubernetes-operator \
-    --set operatorPod.resources.requests.cpu=100m \
-    --set watchNamespaces=\{"${NAMESPACE}"\} \
-    --namespace ${NAMESPACE} \
-    --version ${FKO_VERSION}
-
 kubectl create secret generic cmf-encryption-key \
         --from-file=encryption-key=./assets/cmf.key \
         --namespace ${NAMESPACE} \
@@ -54,18 +45,6 @@ kubectl create secret generic cmf-encryption-key \
     | kubectl apply -f -
 
 deploy_manifests ./manifests/cmf-rbac
-
-# CMF
-helm upgrade --install cmf \
-    confluentinc/confluent-manager-for-apache-flink \
-    --set resources.requests.cpu=100m \
-    --set encryption.key.kubernetesSecretName=cmf-encryption-key \
-    --set encryption.key.kubernetesSecretProperty=encryption-key \
-    --set rbac=false \
-    --set serviceAccount.create=false \
-    --set serviceAccount.name=${CMF_SERVICE_ACCOUNT} \
-    --namespace ${NAMESPACE} \
-    --version ${CMF_VERSION}
 
 # Create certificates
 # export CERT_DIR=./local/certs
@@ -157,6 +136,27 @@ kubectl create secret generic mds-token \
     --save-config \
     --dry-run=client \
     -oyaml | kubectl apply -f -
+
+# FKO: this is the flakiest part of the deploy script, since it's super hard to detect when cert-manager is ready
+## Depends on cert-manager
+helm upgrade --install cp-flink-kubernetes-operator \
+    confluentinc/flink-kubernetes-operator \
+    --set operatorPod.resources.requests.cpu=100m \
+    --set watchNamespaces=\{"${NAMESPACE}"\} \
+    --namespace ${NAMESPACE} \
+    --version ${FKO_VERSION}
+
+# CMF
+helm upgrade --install cmf \
+    confluentinc/confluent-manager-for-apache-flink \
+    --set resources.requests.cpu=100m \
+    --set encryption.key.kubernetesSecretName=cmf-encryption-key \
+    --set encryption.key.kubernetesSecretProperty=encryption-key \
+    --set rbac=false \
+    --set serviceAccount.create=false \
+    --set serviceAccount.name=${CMF_SERVICE_ACCOUNT} \
+    --namespace ${NAMESPACE} \
+    --version ${CMF_VERSION}
 
 wait_for_nginx
 wait_for_cfk

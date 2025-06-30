@@ -8,7 +8,7 @@ wait_for_c3 () {
         echo "Waiting for ControlCenter pod to be ready..."
         kubectl -n ${NAMESPACE} get pods
         echo ''
-        sleep 5
+        sleep 10
     done
     echo 'Access at "https://confluent.127-0-0-1.nip.io"'
 }
@@ -26,7 +26,7 @@ wait_for_cert_manager () {
         sleep 10
     done
 
-    sleep 5
+    sleep 30
 }
 
 wait_for_cfk () {

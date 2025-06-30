@@ -2985,6 +2985,7 @@
     "oauth2DeviceCodeLifespan": "600",
     "oauth2DevicePollingInterval": "5",
     "parRequestUriLifespan": "60",
+    "frontendUrl": "https://keycloak.127-0-0-1.nip.io/",
     "cibaInterval": "5",
     "realmReusableOtpCode": "false"
   },
