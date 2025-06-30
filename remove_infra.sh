@@ -34,7 +34,7 @@ done
 while [[ $(kubectl -n ${NAMESPACE} get pods -l platform.confluent.io/origin=flink | wc -l ) -gt 2 ]];
 do
     echo "Waiting for FKO-managed pods to terminate"
-    kubectl -n ${NAMESPACE} get pods -l confluent-platform=true
+    kubectl -n ${NAMESPACE} get pods -l platform.confluent.io/origin=flink
     sleep 10
 done
 

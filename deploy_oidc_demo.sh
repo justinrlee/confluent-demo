@@ -87,5 +87,3 @@ kubectl create -n ${NAMESPACE} secret generic \
 kubectl apply -f ${LOCAL_DIR}/controlcenter-oauth-jaas.yaml
 
 deploy_manifests ${MANIFEST_DIR}
-
-wait_for_c3

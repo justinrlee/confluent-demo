@@ -41,5 +41,3 @@ kubectl -n ${NAMESPACE} create secret generic rest-client \
 kubectl apply -f ${LOCAL_DIR}/secret-rest-client.yaml
 
 deploy_manifests ${MANIFEST_DIR}
-
-wait_for_c3

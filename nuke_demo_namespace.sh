@@ -17,3 +17,12 @@ done
 echo "--------"
 
 echo "This doesn't currently delete anything, just list all items in the namespace"
+
+echo "To remove the finalizer for a resource, run this:"
+echo "kubectl -n ${NAMESPACE} patch -p '{\"metadata\":{\"finalizers\":null}}' -v8 --type=merge  <resourcename>/<resourcetype>"
+
+echo "for example"
+
+echo "kubectl -n confluent-demo patch -p '{\"metadata\":{\"finalizers\":null}}' -v8 --type=merge flinkapplication.platform.confluent.io/state-machine-example"
+echo "kubectl -n confluent-demo patch -p '{\"metadata\":{\"finalizers\":null}}' -v8 --type=merge flinkenvironment/confluent-demo"
+echo "kubectl -n confluent-demo patch -p '{\"metadata\":{\"finalizers\":null}}' -v8 --type=merge flinkdeployment.flink.apache.org/state-machine-example"

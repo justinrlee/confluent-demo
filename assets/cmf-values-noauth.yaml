@@ -1,0 +1,14 @@
+resources:
+  requests:
+    cpu: 100m
+
+encryption:
+  key:
+    kubernetesSecretName: cmf-encryption-key
+    kubernetesSecretProperty: encryption-key
+
+rbac: false
+
+serviceAccount:
+  create: false
+  name: ${CMF_SERVICE_ACCOUNT}
