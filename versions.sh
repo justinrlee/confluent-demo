@@ -19,6 +19,10 @@ export INGRESS_NGINX_NAMESPACE=ingress-nginx
 export OPERATOR_NAMESPACE=confluent-demo
 export FLINK_ENVIRONMENT_NAME=demo
 
+export CMF_SERVICE_ACCOUNT=cmf-confluent-demo
+
 export KEYCLOAK_NAMESPACE=keycloak
 
 export LOCAL_DIR=./local
+export CERT_DIR=./local/certs
+export CFSSL_DIR=./local/cfssl

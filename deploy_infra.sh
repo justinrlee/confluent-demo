@@ -19,8 +19,6 @@ kubectl create namespace ${INGRESS_NGINX_NAMESPACE} --dry-run=client -oyaml | ku
 # Deploy cert-manager
 deploy_manifests ./manifests/cert-manager
 
-wait_for_cert_manager
-
 ##### Helm deploys
 # Ingress NGINX
 helm upgrade --install ingress-nginx \
@@ -33,15 +31,19 @@ helm upgrade --install ingress-nginx \
 helm upgrade --install confluent-for-kubernetes \
     confluentinc/confluent-for-kubernetes \
     --namespace ${OPERATOR_NAMESPACE} \
-    --set namespaced=false \
+    --set namespaced=true \
     --set enableCMFDay2Ops=true \
+    --set namespaceList=\{"${NAMESPACE}","${OPERATOR_NAMESPACE}"\} \
     --version ${CFK_CHART_VERSION}
+
+wait_for_cert_manager
 
 # FKO
 ## Depends on cert-manager
 helm upgrade --install cp-flink-kubernetes-operator \
     confluentinc/flink-kubernetes-operator \
     --set operatorPod.resources.requests.cpu=100m \
+    --set watchNamespaces=\{"${NAMESPACE}"\} \
     --namespace ${NAMESPACE} \
     --version ${FKO_VERSION}
 
@@ -51,18 +53,23 @@ kubectl create secret generic cmf-encryption-key \
         --dry-run=client -oyaml --save-config \
     | kubectl apply -f -
 
+deploy_manifests ./manifests/cmf-rbac
+
 # CMF
 helm upgrade --install cmf \
     confluentinc/confluent-manager-for-apache-flink \
     --set resources.requests.cpu=100m \
     --set encryption.key.kubernetesSecretName=cmf-encryption-key \
     --set encryption.key.kubernetesSecretProperty=encryption-key \
+    --set rbac=false \
+    --set serviceAccount.create=false \
+    --set serviceAccount.name=${CMF_SERVICE_ACCOUNT} \
     --namespace ${NAMESPACE} \
     --version ${CMF_VERSION}
 
 # Create certificates
-export CERT_DIR=./local/certs
-export CFSSL_DIR=./local/cfssl
+# export CERT_DIR=./local/certs
+# export CFSSL_DIR=./local/cfssl
 mkdir -p ${CERT_DIR} ${CFSSL_DIR}
 
 env | sort
@@ -80,6 +87,7 @@ for RESOURCE in \
     kafka \
     connect \
     controlcenter \
+    client \
     schemaregistry;
 do
     export RESOURCE
@@ -130,6 +138,18 @@ do
         -oyaml | kubectl apply -f -
 done
 
+kubectl create secret generic tls-client-full \
+    --from-file=ca.crt=${CERT_DIR}/ca.crt \
+    --from-file=client.crt=${CERT_DIR}/client.pem \
+    --from-file=client.key=${CERT_DIR}/client-key.pem \
+    --from-file=truststore.p12=${CERT_DIR}/client-truststore.p12 \
+    --from-file=keystore.p12=${CERT_DIR}/client.p12 \
+        --namespace ${NAMESPACE} \
+        --save-config \
+        --dry-run=client \
+    -oyaml | kubectl apply -f -
+
+
 kubectl create secret generic mds-token \
   --from-file=mdsPublicKey.pem=assets/mds.pub \
   --from-file=mdsTokenKeyPair.pem=assets/mds.key \
@@ -138,4 +158,5 @@ kubectl create secret generic mds-token \
     --dry-run=client \
     -oyaml | kubectl apply -f -
 
+wait_for_nginx
 wait_for_cfk

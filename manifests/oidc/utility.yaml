@@ -18,5 +18,13 @@ spec:
     spec:
       terminationGracePeriodSeconds: 10
       containers:
-      - name: utility
-        image: justinrlee/confluent-utility:latest
+        - name: utility
+          image: justinrlee/confluent-utility:latest
+          volumeMounts:
+            - name: client-tls
+              readOnly: true
+              mountPath: /root/certs
+      volumes:
+        - name: client-tls
+          secret:
+            secretName: tls-client-full

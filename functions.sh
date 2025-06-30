@@ -37,6 +37,14 @@ wait_for_cfk () {
     done
 }
 
+wait_for_nginx () {
+    while [[ $(kubectl -n ${INGRESS_NGINX_NAMESPACE} get pods -l app.kubernetes.io/name=ingress-nginx | grep "1/1" | wc -l ) -lt 1 ]]; 
+    do
+        echo "Waiting for CFK to be ready..."
+        sleep 10
+    done
+}
+
 deploy_manifests () {
     mkdir -p ${LOCAL_DIR}
 

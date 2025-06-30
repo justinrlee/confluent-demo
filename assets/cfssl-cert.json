@@ -2,6 +2,7 @@
     "CN": "${RESOURCE}",
     "hosts": [
       "localhost",
+      "${RESOURCE}",
       "*.127-0-0-1.nip.io",
       "*.${NAMESPACE}.svc.cluster.local",
       "*.${RESOURCE}.${NAMESPACE}.svc.cluster.local"

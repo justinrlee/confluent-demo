@@ -152,3 +152,4 @@ TODO (demo)
 * Add connectors (and plugins) - shoe store
 * Add real Flink job
 * ... other demo things?
+* clean up cmf permissions
