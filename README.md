@@ -118,6 +118,21 @@ Log in with `kafka`/`kafka-secret`
 
 ... Poke around?
 
+#### CLI Login
+
+Exec into the confluent-utility-0 container:
+
+```bash
+kubectl -n confluent-demo exec -it confluent-utility-0 -- bash
+```
+
+Login:
+
+```bash
+confluent login --url https://kafka:8090 --certificate-authority-path certs/ca.crt  --no-browser
+```
+
+
 ### Cleanup
 
 ```bash
