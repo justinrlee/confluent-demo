@@ -1,13 +1,15 @@
-# THIS IS WIP
-
 # Local workstation Confluent demo (with Flink)
 
 This runs a small Confluent Platform cluster on a local workstation, using Docker Desktop and the local Kubernetes
 
 There are two versions:
 
-1. 'ldap' mode - uses LDAP (OpenLDAP) for authentication/authorization, is maybe 80% functionally complete, although the demo needs to be fleshed out
-2. 'oidc' mode - uses OIDC/OAuth2.0 (Keycloak) for authentication, is maybe 30% functionally complete
+1. 'oidc' mode - uses OIDC/OAuth2.0 (Keycloak) for authentication, is maybe 80% functionally complete
+    * Does not yet include CMF authentication/authorization, which I'm still trying to get working.
+1. 'ldap' mode - uses LDAP (OpenLDAP) for authentication/authorization, is maybe 50% functionally complete
+    * To keep the root directory clean, I've moved the startup scripts for this to `ldap`, which means they currently don't work.
+
+Neither one has a complete 'demo' but should mostly work in getting all the components up and running.
 
 Functionally, this will deploy the following:
 
@@ -49,19 +51,7 @@ Instruction:
 Deploy infrastructure (CFK, CMF, FKO, Ingress-NGINX Ingress Controller, various certificates)
 
 ```bash
-./deploy_infra.sh
-```
-
-Deploy Keycloak
-
-```bash
-./deploy_infra_keycloak.sh
-```
-
-Deploy OIDC (keycloak-based) demo:
-
-```bash
-./deploy_oidc_demo.sh
+./install_oidc_all.sh
 ```
 
 Monitor pods as they come up (need Control Center to have 3/3 running containers); this may take some time to start.
@@ -78,45 +68,6 @@ Log in with `admin`/`admin`
 
 ... Poke around?
 
-### Cleanup
-
-```bash
-./remove_oidc_demo.sh
-./remove_infra_keycloak.sh
-./remove_infra.sh
-```
-
-## Installation: LDAP Demo (Alternate option)
-
-```bash
-./deploy_infra.sh
-```
-
-Install Keycloak
-
-```bash
-./deploy_infra_ldap.sh
-```
-
-Deploy OIDC (keycloak-based) demo:
-
-```bash
-./deploy_ldap_demo.sh
-```
-
-Monitor pods as they come up (need Control Center to be 3/3); may take some time
-
-```bash
-kubectl -n confluent-demo get pods -w
-```
-
-(You can also monitor C3 logs with `kubectl -n confluent-demo logs -f controlcenter-0 -c controlcenter`)
-
-Open up control center: https://confluent.127-0-0-1.nip.io/
-
-Log in with `kafka`/`kafka-secret`
-
-... Poke around?
 
 #### CLI Login
 
@@ -132,19 +83,17 @@ Login:
 confluent login --url https://kafka:8090 --certificate-authority-path certs/ca.crt  --no-browser
 ```
 
-
 ### Cleanup
 
 ```bash
-./remove_ldap_demo.sh
-./remove_infra_ldap.sh
-./remove_infra.sh
+./uninstall_oidc_all.sh
 ```
 
 ## TODO
 
 TODO (Repo)
 * ~~Update to 8.0.0 (CP and CPF/CMF)~~
+* Get OIDC working for CMF
 * lots of refactoring
     * rearrange installation / uninstallation scripts to use functions
     * paramaterize ldap namespace

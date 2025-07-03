@@ -26,7 +26,7 @@ wait_for_cert_manager () {
         sleep 10
     done
 
-    sleep 30
+    sleep 10
 }
 
 wait_for_cfk () {

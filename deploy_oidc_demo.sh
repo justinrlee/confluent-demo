@@ -38,6 +38,11 @@ clientId=controlcenter
 clientSecret=7dfe814e68561764539f09ae49012ac8
 EOF
 
+tee ${LOCAL_DIR}/cmf_oauth_jaas.txt <<-'EOF'
+clientId=cmf
+clientSecret=5f8e9b2c3d4a8e7b6f0c1d2e3f4a5b6c
+EOF
+
 kubectl create -n ${NAMESPACE} secret generic \
     oauth-jaas \
     --from-file=oauth.txt=${LOCAL_DIR}/oauth_jaas.txt \
@@ -85,5 +90,13 @@ kubectl create -n ${NAMESPACE} secret generic \
     --dry-run=client -oyaml --save-config \
     > ${LOCAL_DIR}/controlcenter-oauth-jaas.yaml
 kubectl apply -f ${LOCAL_DIR}/controlcenter-oauth-jaas.yaml
+
+kubectl create -n ${NAMESPACE} secret generic \
+    cmf-oauth-jaas \
+    --from-file=oauth.txt=${LOCAL_DIR}/cmf_oauth_jaas.txt \
+    --from-file=oidcClientSecret.txt=${LOCAL_DIR}/cmf_oauth_jaas.txt \
+    --dry-run=client -oyaml --save-config \
+    > ${LOCAL_DIR}/cmf-oauth-jaas.yaml
+kubectl apply -f ${LOCAL_DIR}/cmf-oauth-jaas.yaml
 
 deploy_manifests ${MANIFEST_DIR}

@@ -341,6 +341,16 @@
           "attributes": {}
         }
       ],
+      "cmf": [
+        {
+          "id": "1575cebc-9ea7-443e-9d24-f5ca1c7432b1",
+          "name": "uma_protection",
+          "composite": false,
+          "clientRole": true,
+          "containerId": "d8e86361-2af0-43ce-92c7-f39a86a9c716",
+          "attributes": {}
+        }
+      ],
       "admin-cli": [],
       "account-console": [],
       "broker": [
@@ -617,6 +627,27 @@
       ],
       "clientRoles": {
         "controlcenter": [
+          "uma_protection"
+        ]
+      },
+      "notBefore": 0,
+      "groups": []
+    },
+    {
+      "id": "73296b2f-d9f9-4100-a4cb-89eaf0b74831",
+      "username": "service-account-cmf",
+      "emailVerified": false,
+      "createdTimestamp": 1750746643172,
+      "enabled": true,
+      "totp": false,
+      "serviceAccountClientId": "cmf",
+      "disableableCredentialTypes": [],
+      "requiredActions": [],
+      "realmRoles": [
+        "default-roles-confluent"
+      ],
+      "clientRoles": {
+        "cmf": [
           "uma_protection"
         ]
       },
@@ -1245,6 +1276,83 @@
           {
             "name": "Default Resource",
             "type": "urn:controlcenter:resources:default",
+            "ownerManagedAccess": false,
+            "attributes": {},
+            "uris": [
+              "/*"
+            ]
+          }
+        ],
+        "policies": [],
+        "scopes": [],
+        "decisionStrategy": "UNANIMOUS"
+      }
+    },
+    {
+      "id": "d8e86361-2af0-43ce-92c7-f39a86a9c716",
+      "clientId": "cmf",
+      "name": "",
+      "description": "",
+      "rootUrl": "",
+      "adminUrl": "",
+      "baseUrl": "",
+      "surrogateAuthRequired": false,
+      "enabled": true,
+      "alwaysDisplayInConsole": false,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "5f8e9b2c3d4a8e7b6f0c1d2e3f4a5b6c",
+      "redirectUris": [
+        "/*"
+      ],
+      "webOrigins": [
+        "/*"
+      ],
+      "notBefore": 0,
+      "bearerOnly": false,
+      "consentRequired": false,
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": true,
+      "serviceAccountsEnabled": true,
+      "authorizationServicesEnabled": true,
+      "publicClient": false,
+      "frontchannelLogout": true,
+      "protocol": "openid-connect",
+      "attributes": {
+        "realm_client": "false",
+        "oidc.ciba.grant.enabled": "false",
+        "client.secret.creation.time": "1750746643",
+        "backchannel.logout.session.required": "true",
+        "standard.token.exchange.enabled": "false",
+        "oauth2.device.authorization.grant.enabled": "true",
+        "backchannel.logout.revoke.offline.tokens": "false"
+      },
+      "authenticationFlowBindingOverrides": {},
+      "fullScopeAllowed": true,
+      "nodeReRegistrationTimeout": -1,
+      "defaultClientScopes": [
+        "service_account",
+        "web-origins",
+        "acr",
+        "roles",
+        "profile",
+        "basic",
+        "email"
+      ],
+      "optionalClientScopes": [
+        "address",
+        "phone",
+        "organization",
+        "offline_access",
+        "microprofile-jwt"
+      ],
+      "authorizationSettings": {
+        "allowRemoteResourceManagement": true,
+        "policyEnforcementMode": "ENFORCING",
+        "resources": [
+          {
+            "name": "Default Resource",
+            "type": "urn:cmf:resources:default",
             "ownerManagedAccess": false,
             "attributes": {},
             "uris": [

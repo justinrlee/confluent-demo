@@ -6,3 +6,14 @@ metadata:
 spec:
   cmfRest:
     endpoint: http://cmf-service.${NAMESPACE}.svc.cluster.local
+    # authentication:
+    #   type: oauth
+    #   oauth:
+    #     secretRef: oauth-jaas
+    #     # secretRef: cmf-oauth-jaas
+    #     configuration:
+    #       tokenEndpointUri: http://keycloak.${KEYCLOAK_NAMESPACE}.svc.cluster.local:8080/realms/confluent/protocol/openid-connect/token
+    #       expectedIssuer: https://keycloak.127-0-0-1.nip.io/realms/confluent
+    #       # expectedIssuer: http://keycloak.${KEYCLOAK_NAMESPACE}.svc.cluster.local:8080/realms/confluent
+    #       jwksEndpointUri: http://keycloak.${KEYCLOAK_NAMESPACE}.svc.cluster.local:8080/realms/confluent/protocol/openid-connect/certs
+    #       subClaimName: client_id

@@ -23,7 +23,7 @@ spec:
       - User:kafka
       - User:operator
       - User:admin
-      - User:31644706-b8a3-461a-9239-c28fe3649816
+      - User:cmf
     type: rbac
   image:
     application: confluentinc/cp-server:${CONFLUENT_PLATFORM_VERSION}
