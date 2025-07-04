@@ -27,6 +27,9 @@ helm upgrade --install ingress-nginx \
     --set "controller.extraArgs.enable-ssl-passthrough=" \
     --version ${INGRESS_NGINX_VERSION}
 
+# Upgrade CFK CRDs
+helm show crds confluentinc/confluent-for-kubernetes | kubectl apply --server-side=true -f
+
 # CFK
 helm upgrade --install confluent-for-kubernetes \
     confluentinc/confluent-for-kubernetes \
