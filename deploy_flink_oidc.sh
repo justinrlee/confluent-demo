@@ -6,14 +6,14 @@ set -x
 . ./versions.sh
 . ./functions.sh
 
-wait_for_cert_manager
+# wait_for_cert_manager
 
-# FKO: this is the flakiest part of the deploy script, since it's super hard to detect when cert-manager is ready
-## Depends on cert-manager
+# FKO: disable cert-manager cause it's super flaky
 helm upgrade --install cp-flink-kubernetes-operator \
     confluentinc/flink-kubernetes-operator \
     --set operatorPod.resources.requests.cpu=100m \
     --set watchNamespaces=\{"${NAMESPACE}"\} \
+    --set webhook.create=false \
     --namespace ${NAMESPACE} \
     --version ${FKO_VERSION}
 

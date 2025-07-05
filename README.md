@@ -99,7 +99,7 @@ TODO (Repo)
     * paramaterize ldap namespace
 * lots of documentation
 * look at gateway API
-* figure out how to remove cert-manager
+* ~~figure out how to remove cert-manager~~
 * tune resources (requirements and limits) to work better locally
 
 TODO (ldap)

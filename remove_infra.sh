@@ -57,9 +57,9 @@ sleep 10
 helm uninstall ingress-nginx \
     --namespace ${INGRESS_NGINX_NAMESPACE}
 
-sleep 10
+# sleep 10
 
-kubectl delete -f ./manifests/cert-manager/cert-manager.yaml
+# kubectl delete -f ./manifests/cert-manager/cert-manager.yaml
 
 sleep 10
 

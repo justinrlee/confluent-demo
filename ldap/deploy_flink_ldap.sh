@@ -8,12 +8,12 @@ set -x
 
 export MANIFEST_DIR=./manifests/flink
 
-wait_for_cert_manager
+# wait_for_cert_manager
 
-# FKO: this is the flakiest part of the deploy script, since it's super hard to detect when cert-manager is ready
-## Depends on cert-manager
+# FKO: disable cert-manager cause it's super flaky
 helm upgrade --install cp-flink-kubernetes-operator \
     confluentinc/flink-kubernetes-operator \
+    --set webhook.create=false \
     --set operatorPod.resources.requests.cpu=100m \
     --set watchNamespaces=\{"${NAMESPACE}"\} \
     --namespace ${NAMESPACE} \

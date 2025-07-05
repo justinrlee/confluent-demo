@@ -16,9 +16,6 @@ kubectl create namespace ${NAMESPACE} --dry-run=client -oyaml | kubectl apply -f
 kubectl create namespace ${KEYCLOAK_NAMESPACE} --dry-run=client -oyaml | kubectl apply -f -
 kubectl create namespace ${INGRESS_NGINX_NAMESPACE} --dry-run=client -oyaml | kubectl apply -f -
 
-# Deploy cert-manager
-deploy_manifests ./manifests/cert-manager
-
 ##### Helm deploys
 # Ingress NGINX
 helm upgrade --install ingress-nginx \
