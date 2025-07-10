@@ -7,7 +7,7 @@ set -x
 . ./functions.sh
 
 ./deploy_infra.sh
-./deploy_infra_keycloak.sh
+./deploy_keycloak.sh
 ./deploy_oidc_demo.sh
 ./deploy_flink_oidc.sh
 

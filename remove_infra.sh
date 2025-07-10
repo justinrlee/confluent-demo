@@ -21,6 +21,8 @@ kubectl -n ${NAMESPACE} delete \
         tls-kraft \
         tls-schemaregistry
 
+# This shouldn't be running, but sometimes it is
+kubectl -n ${NAMESPACE} delete flinkdeployment state-machine-example
 
 # gt 2: ignore header lines and CFK operator pod
 while [[ $(kubectl -n ${NAMESPACE} get pods -l confluent-platform=true | wc -l ) -gt 2 ]];
