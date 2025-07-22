@@ -6,6 +6,12 @@
 ./check_prereqs.sh
 ```
 
+If using Orbstack, use this:
+
+```bash
+./check_orbstack_prereqs.sh
+```
+
 ## Installation: OIDC Demo (Recommended)
 
 Deploy infrastructure (CFK, CMF, FKO, Ingress-NGINX Ingress Controller, various certificates)
@@ -25,7 +31,6 @@ kubectl -n confluent-demo get pods -w
 Open up the control center UI: https://confluent.127-0-0-1.nip.io/
 
 ... Poke around?
-
 
 #### CLI Login
 

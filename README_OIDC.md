@@ -6,6 +6,12 @@
 ./check_prereqs.sh
 ```
 
+If using Orbstack, use this:
+
+```bash
+./check_orbstack_prereqs.sh
+```
+
 ## Installation: OIDC Demo (Recommended)
 
 Deploy infrastructure (Keycloak, CFK, CMF, FKO, Ingress-NGINX Ingress Controller, various certificates)
