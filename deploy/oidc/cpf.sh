@@ -89,7 +89,7 @@ kubectl create secret generic tls-cmf-full \
 
 deploy_manifests ./manifests/cmf-rbac
 
-envsubst < ./assets/cmf-values.yaml > ${LOCAL_DIR}/cmf-values.yaml
+envsubst < ./assets/cmf-values-oidc.yaml > ${LOCAL_DIR}/cmf-values.yaml
 
 # CMF
 helm upgrade --install cmf \

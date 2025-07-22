@@ -11,15 +11,19 @@ RESOURCES=$(kubectl api-resources --namespaced=true -oname --verbs=get | grep -v
 for R in ${RESOURCES[@]};
 do 
 # echo ${R}
-kubectl get ${R} -n ${NAMESPACE} -oname
+    for ITEM in $(kubectl get ${R} -n ${NAMESPACE} -oname);
+    do
+        echo $ITEM
+        echo "kubectl -n ${NAMESPACE} patch -p '{\"metadata\":{\"finalizers\":null}}' -v8 --type=merge ${ITEM}"
+    done
 done
 
 echo "--------"
 
 echo "This doesn't currently delete anything, just list all items in the namespace"
 
-echo "To remove the finalizer for a resource, run this:"
-echo "kubectl -n ${NAMESPACE} patch -p '{\"metadata\":{\"finalizers\":null}}' -v8 --type=merge  <resourcename>/<resourcetype>"
+# echo "To remove the finalizer for a resource, run this:"
+# echo "kubectl -n ${NAMESPACE} patch -p '{\"metadata\":{\"finalizers\":null}}' -v8 --type=merge  <resourcename>/<resourcetype>"
 
 # echo "for example"
 

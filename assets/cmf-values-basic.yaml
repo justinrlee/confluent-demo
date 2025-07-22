@@ -1,0 +1,35 @@
+resources:
+  requests:
+    cpu: 100m
+
+encryption:
+  key:
+    kubernetesSecretName: cmf-encryption-key
+    kubernetesSecretProperty: encryption-key
+
+rbac: false
+
+serviceAccount:
+  create: false
+  name: ${CMF_SERVICE_ACCOUNT}
+
+cmf:
+  sql:
+    production: true
+    examples-catalog:
+      enabled: true
+
+# mountedVolumes:
+#   volumes:
+#     - name: mds-token
+#       secret:
+#         secretName: mds-token
+#     - name: tls-cmf
+#       secret:
+#         secretName: tls-cmf-full
+
+#   volumeMounts:
+#     - name: mds-token
+#       mountPath: /mount/mds
+#     - name: tls-cmf
+#       mountPath: /mount/tls

@@ -9,20 +9,21 @@
 # TODO: Clean this up
 kubectl -n ${NAMESPACE} delete \
     secret \
+        tls-client-full \
         admin-ldap-client \
         kafka-client \
         kafka-ldap-client \
         mds-token \
         rest-client \
         schemaregistry-client \
+        tls-kraft \
+        tls-kafka \
         tls-connect \
         tls-controlcenter \
-        tls-kafka \
-        tls-kraft \
         tls-schemaregistry
 
 # This shouldn't be running, but sometimes it is
-kubectl -n ${NAMESPACE} delete flinkdeployment state-machine-example
+# kubectl -n ${NAMESPACE} delete flinkdeployment state-machine-example
 
 # gt 2: ignore header lines and CFK operator pod
 while [[ $(kubectl -n ${NAMESPACE} get pods -l confluent-platform=true | wc -l ) -gt 2 ]];
@@ -41,15 +42,15 @@ do
 done
 
 
-helm uninstall cmf \
-    --namespace ${NAMESPACE}
+# helm uninstall cmf \
+#     --namespace ${NAMESPACE}
 
-sleep 10
+# sleep 10
 
-helm uninstall cp-flink-kubernetes-operator \
-    --namespace ${NAMESPACE}
+# helm uninstall cp-flink-kubernetes-operator \
+#     --namespace ${NAMESPACE}
 
-sleep 10
+# sleep 10
 
 helm uninstall confluent-for-kubernetes \
     -n ${NAMESPACE}

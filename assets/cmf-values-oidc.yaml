@@ -38,6 +38,11 @@ cmf:
 
   kafka:
     oauthbearerAllowedUrls: "*"
+
+  sql:
+    production: true
+    examples-catalog:
+      enabled: true
   
   # authorization:
   #   mdsRestConfig:

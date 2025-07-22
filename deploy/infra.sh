@@ -6,6 +6,31 @@ set -x
 . ./versions.sh
 . ./functions.sh
 
+###### Creates / Installs the following:
+
+### Namespaces:
+# demo namespace
+# keycloak namespace
+# ingress nginx namespace
+
+### Helm Charts:
+# ingress-nginx
+# CFK
+
+### Secrets:
+# tls-kraft
+# tls-kafka
+# tls-connect
+# tls-controlcenter
+# tls-schemaregistry
+# tls-client
+# tls-client-full
+# mds-token
+
+### Other
+# CRDs <- not cleaned up
+# Adds repos for helm
+
 # Install Ingress Nginx and Confluent Helm Repos
 helm repo add confluentinc https://packages.confluent.io/helm --force-update
 helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx --force-update

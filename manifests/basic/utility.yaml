@@ -1,0 +1,35 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: confluent-utility
+  namespace: ${NAMESPACE}
+spec:
+  selector:
+    matchLabels:
+      app: confluent-utility # has to match .spec.template.metadata.labels
+  serviceName: "confluent-utility"
+  replicas: 1 # by default is 1
+  # minReadySeconds: 10 # by default is 0
+  template:
+    metadata:
+      labels:
+        app: confluent-utility # has to match .spec.selector.matchLabels
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+        - name: utility
+          image: justinrlee/confluent-utility:latest
+          env:
+            - name: CONFLUENT_CMF_URL
+              value: http://cmf-service.${NAMESPACE}.svc.cluster.local
+            - name: CONFLUENT_CMF_CERTIFICATE_AUTHORITY_PATH
+              value: /root/certs/ca.crt
+          volumeMounts:
+            - name: client-tls
+              readOnly: true
+              mountPath: /root/certs
+      volumes:
+        - name: client-tls
+          secret:
+            secretName: tls-client-full
