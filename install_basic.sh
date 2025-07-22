@@ -10,4 +10,4 @@ set -x
 ./deploy/basic/cp.sh
 ./deploy/basic/cpf.sh
 
-wait_for_c3
+check_for_readiness
