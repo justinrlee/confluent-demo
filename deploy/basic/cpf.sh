@@ -3,7 +3,7 @@
 set -e
 set -x
 
-. ./versions.sh
+. ./.env
 . ./functions.sh
 
 ###### Creates / Installs the following:
@@ -40,12 +40,13 @@ helm upgrade --install cp-flink-kubernetes-operator \
 
 # TODO: Update CRDs?
 
+delete_if_deleted secret cmf-encryption-key
+
 kubectl create secret generic cmf-encryption-key \
         --from-file=encryption-key=./assets/cmf.key \
         --namespace ${NAMESPACE} \
         --dry-run=client -oyaml --save-config \
     | kubectl apply -f -
-
 
 for RESOURCE in \
     cmf-service;
@@ -88,6 +89,8 @@ do
         -storepass confluent \
         -noprompt
 
+    delete_if_deleted secret tls-${RESOURCE}
+
     kubectl create secret generic tls-${RESOURCE} \
         --from-file=cacerts.pem=${CERT_DIR}/ca.crt \
         --from-file=fullchain.pem=${CERT_DIR}/${RESOURCE}.pem \
@@ -98,6 +101,7 @@ do
         -oyaml | kubectl apply -f -
 done
 
+delete_if_deleted secret tls-cmf-full
 
 kubectl create secret generic tls-cmf-full \
     --from-file=ca.crt=${CERT_DIR}/ca.crt \

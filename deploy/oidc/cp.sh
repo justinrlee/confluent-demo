@@ -3,8 +3,50 @@
 set -e
 set -x
 
-. ./versions.sh
+. ./.env
 . ./functions.sh
+
+
+###### manifests/oidc includes these objects:
+# StatefulSet/confluent-utility
+
+# KRaftController/kraft
+
+# Kafka/kafka
+# Service/kafka-bootstrap
+# Ingress/kafka
+# KafkaRestClass/default
+
+# SchemaRegistry/schemaregistry
+# Ingress/schemaregistry
+
+# Connect/connect
+
+# ControlCenter/controlcenter
+# Ingress/controlcenter
+
+# ConfluentRoleBinding.yaml
+# - ConfluentRolebinding/manual-admin
+# - ConfluentRolebinding/manual-admin-connect
+# - ConfluentRolebinding/manual-admin-sr
+# - ConfluentRolebinding/manual-controlcenter
+# - ConfluentRolebinding/manual-controlcenter-connect
+# - ConfluentRolebinding/manual-controlcenter-sr
+# - ConfluentRoleBinding/manual-connect-sr
+
+# shoe-KafkaTopics.yaml
+# - KafkaTopic/shoe-customers
+# - KafkaTopic/shoe-products
+# - KafkaTopic/shoe-orders
+
+###### also have these secrets
+# oauth-jaas
+# sso-oauth-jaas
+# kafka-oauth-jaas
+# schemaregistry-oauth-jaas
+# connect-oauth-jaas
+# controlcenter-oauth-jaas
+# cmf-oauth-jaas
 
 export MANIFEST_DIR=./manifests/oidc
 

@@ -2,7 +2,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: ingress-kafka
+  name: kafka
   namespace: ${NAMESPACE}
   annotations:
     nginx.ingress.kubernetes.io/force-ssl-redirect: "true"

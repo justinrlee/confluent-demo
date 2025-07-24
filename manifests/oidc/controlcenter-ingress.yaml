@@ -2,7 +2,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: ingress-controlcenter
+  name: controlcenter
   namespace: ${NAMESPACE}
   annotations:
     nginx.ingress.kubernetes.io/force-ssl-redirect: "true"

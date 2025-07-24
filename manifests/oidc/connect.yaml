@@ -72,16 +72,3 @@ spec:
         enabled: true
         secretRef: tls-kraft
       url: https://schemaregistry.${NAMESPACE}.svc.cluster.local:8081
----
-apiVersion: platform.confluent.io/v1beta1
-kind: ConfluentRolebinding
-metadata:
-  name: manual-connect-sr
-  namespace: ${NAMESPACE}
-spec:
-  clustersScopeByIds:
-    schemaRegistryClusterId: id_schemaregistry_confluent-demo
-  principal:
-    name: connect
-    type: user
-  role: SystemAdmin

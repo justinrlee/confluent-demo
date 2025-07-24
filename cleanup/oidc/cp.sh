@@ -3,48 +3,66 @@
 set -e
 set -x
 
-. ./versions.sh
+. ./.env
 . ./functions.sh
 
 # From manifests
-# Could do all of these as a single command
 kubectl -n ${NAMESPACE} delete \
-    confluentrolebinding/manual-admin \
-    confluentrolebinding/manual-admin-connect \
-    confluentrolebinding/manual-admin-sr
+    KafkaTopic/shoe-customers \
+    KafkaTopic/shoe-products \
+    KafkaTopic/shoe-orders \
+        || true
 
 kubectl -n ${NAMESPACE} delete \
     controlcenter/controlcenter \
-    ingress/ingress-controlcenter
+    ingress/controlcenter \
+        || true
 
 kubectl -n ${NAMESPACE} delete \
-    connect/connect
+    connect/connect \
+        || true
 
 kubectl -n ${NAMESPACE} delete \
     schemaregistry/schemaregistry \
-    ingress/ingress-schemaregistry
+    ingress/schemaregistry \
+        || true
 
 kubectl -n ${NAMESPACE} delete \
-    kafkarestclass/default
+    ConfluentRolebinding/manual-admin \
+    ConfluentRolebinding/manual-admin-connect \
+    ConfluentRolebinding/manual-admin-sr \
+    ConfluentRolebinding/manual-controlcenter \
+    ConfluentRolebinding/manual-controlcenter-connect \
+    ConfluentRolebinding/manual-controlcenter-sr \
+    ConfluentRoleBinding/manual-connect-sr \
+        || true
+
+kubectl -n ${NAMESPACE} delete \
+    kafkarestclass/default \
+        || true
 
 kubectl -n ${NAMESPACE} delete \
     kafka/kafka \
     service/kafka-bootstrap \
-    ingress/ingress-kafka
+    ingress/kafka \
+        || true
 
 kubectl -n ${NAMESPACE} delete \
     kraftcontroller/kraft
 
 kubectl -n ${NAMESPACE} delete \
-    statefulset/confluent-utility
+    statefulset/confluent-utility \
+        || true
 
 kubectl -n ${NAMESPACE} delete \
-    flinkapplication/state-machine-example
-
-kubectl -n ${NAMESPACE} delete \
-    flinkenvironment/${NAMESPACE}
-
-kubectl -n ${NAMESPACE} delete \
-    cmfrestclass/default
+    secret \
+        oauth-jaas \
+        sso-oauth-jaas \
+        kafka-oauth-jaas \
+        schemaregistry-oauth-jaas \
+        connect-oauth-jaas \
+        controlcenter-oauth-jaas \
+        cmf-oauth-jaas \
+        || true
 
 # Manually created (TODO)

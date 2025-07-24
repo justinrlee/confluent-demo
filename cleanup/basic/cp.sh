@@ -3,38 +3,46 @@
 set -e
 set -x
 
-. ./versions.sh
+. ./.env
 . ./functions.sh
 
 # From manifests/basic
 kubectl -n ${NAMESPACE} delete \
     KafkaTopic/shoe-customers \
     KafkaTopic/shoe-products \
-    KafkaTopic/shoe-orders
+    KafkaTopic/shoe-orders \
+        || true
 
 kubectl -n ${NAMESPACE} delete \
     controlcenter/controlcenter \
-    ingress/ingress-controlcenter
+    ingress/controlcenter \
+        || true
 
 kubectl -n ${NAMESPACE} delete \
-    connect/connect
+    connect/connect \
+        || true
 
 kubectl -n ${NAMESPACE} delete \
     schemaregistry/schemaregistry \
-    ingress/ingress-schemaregistry
+    ingress/schemaregistry \
+        || true
 
 kubectl -n ${NAMESPACE} delete \
-    kafkarestclass/default
+    kafkarestclass/default \
+        || true
 
 kubectl -n ${NAMESPACE} delete \
     kafka/kafka \
     service/kafka-bootstrap \
-    ingress/ingress-kafka
+    ingress/kafka \
+        || true
 
 kubectl -n ${NAMESPACE} delete \
-    kraftcontroller/kraft
+    kraftcontroller/kraft \
+        || true
 
 kubectl -n ${NAMESPACE} delete \
-    statefulset/confluent-utility
+    statefulset/confluent-utility \
+        || true
 
 # Manually created (TODO)

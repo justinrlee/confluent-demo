@@ -43,15 +43,15 @@ Go to one of these two docs:
 * [OIDC Mode](README_OIDC.md)
 
 ## TODO (Repo)
-* ~~Update to 8.0.0 (CP and CPF/CMF)~~
-* support orbstack
-* verify we remove cfk helm chart
-* cleanup scripts
-* change startup detection
-* lots of refactoring
-    * rearrange installation / uninstallation scripts to use functions
-    * paramaterize ldap namespace
-* lots of documentation
-* look at gateway API
+* Refactor
+* Improve Documentation
+* Look at Kubernetes Gateway API
+* Move versions.sh > .env
+* ~~rearrange installation / uninstallation scripts to use functions~~
+* ~~Size CPU / Memory~~
+* ~~Cleanup scripts~~
+* ~~change startup detection~~
 * ~~figure out how to remove cert-manager~~
-* tune resources (requirements and limits) to work better locally
+* ~~Update to 8.0.0 (CP and CPF/CMF)~~
+* ~~support orbstack~~
+* ~~verify we remove cfk helm chart~~

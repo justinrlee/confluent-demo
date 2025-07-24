@@ -3,7 +3,7 @@
 # set -e
 # set -x
 
-. ./versions.sh
+. ./.env
 . ./functions.sh
 
 # From manifests
@@ -14,13 +14,16 @@ kubectl -n ${KEYCLOAK_NAMESPACE} delete \
     service/keycloak-discovery \
     statefulset/keycloak \
     deployment/postgres \
-    service/postgres
+    service/postgres \
+        || true
 
 sleep 10
 
 # Manually created
 kubectl -n ${KEYCLOAK_NAMESPACE} delete \
     secret/tls-keycloak \
-    configmap/keycloak-realm
+    configmap/keycloak-realm \
+        || true
 
-kubectl delete namespace ${KEYCLOAK_NAMESPACE}
+kubectl delete namespace ${KEYCLOAK_NAMESPACE} \
+        || true

@@ -3,7 +3,7 @@
 set -e
 # set -x
 
-. ./versions.sh
+. ./.env
 . ./functions.sh
 
 RESOURCES=$(kubectl api-resources --namespaced=true -oname --verbs=get | grep -v event)

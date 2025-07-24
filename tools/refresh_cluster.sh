@@ -4,7 +4,7 @@
 set -e
 # set -x
 
-. ./versions.sh
+. ./.env
 . ./functions.sh
 
 kubectl -n ${NAMESPACE} rollout restart statefulset kraft

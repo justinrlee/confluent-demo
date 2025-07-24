@@ -1,6 +1,22 @@
 #!/bin/bash
 
-. ./versions.sh
+. ./.env
+
+# If a resource has a deletionTimestamp, remove finalizers and delete it
+# Sample Usage (either should work):
+    # delete_if_deleted Secret mds-token
+    # delete_if_deleted Secret/mds-token
+delete_if_deleted () {
+    if [[ $(kubectl -n ${NAMESPACE} get $1 $2 -ojsonpath='{.metadata.deletionTimestamp}' | wc -c) -gt 0 ]];
+    then
+        echo "Removing finalizers for $1 $2"
+        kubectl -n ${NAMESPACE} patch -p '{"metadata":{"finalizers":null}}' --type=merge $1 $2 $3
+        echo "Deleting $1 $2"
+        # Ignore set -e
+        kubectl -n ${NAMESPACE} delete $1 $2 || true
+        sleep 1
+    fi
+}
 
 wait_for_c3 () {
     while [[ $(kubectl -n ${NAMESPACE} get pods -l app=controlcenter | grep '3/3' | grep "Running" | wc -l) -lt 1 ]];
@@ -54,7 +70,7 @@ wait_for_keycloak() {
 restart_if_not_ready () {
     if [[ $(kubectl -n ${NAMESPACE} get pod ${1} | grep "1/1" | grep "Running" | wc -l ) -lt 1 ]];
     then
-        kubectl -n ${NAMESPACE} delete pod ${1}
+        kubectl -n ${NAMESPACE} delete pod ${1} || true
     fi
 }
 
@@ -70,6 +86,15 @@ check_for_readiness () {
     # Connect takes forever to start, and is not actually necessary for the C3 UI to come up
     # wait_for connect 1
     wait_for_c3
+}
+
+clean_up_flinkdeployment () {
+    while [[ $(kubectl -n ${NAMESPACE} get FlinkDeployment -oname | wc -w ) -gt 0 ]]; 
+    do
+        echo "Waiting for FlinkDeployments to be removed ..."
+        kubectl -n ${NAMESPACE} get FlinkDeployment
+        sleep 10
+    done
 }
 
 deploy_manifests () {

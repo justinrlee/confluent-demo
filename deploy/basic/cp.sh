@@ -3,7 +3,7 @@
 set -e
 set -x
 
-. ./versions.sh
+. ./.env
 . ./functions.sh
 
 ###### manifests/basic includes these objects:
@@ -12,17 +12,17 @@ set -x
 # KRaftController/kraft
 
 # Kafka/kafka
-# Ingress/ingress-kafka
+# Ingress/kafka
 # Service/kafka-bootstrap
 # KafkaRestClass/default
 
 # SchemaRegistry/schemaregistry
-# Ingress/ingress-schemaregistry
+# Ingress/schemaregistry
 
 # Connect/connect
 
 # ControlCenter/controlcenter
-# Ingress/ingress-controlcenter
+# Ingress/controlcenter
 
 # KafkaTopic/shoe-customers
 # KafkaTopic/shoe-products

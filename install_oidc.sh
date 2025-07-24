@@ -3,7 +3,7 @@
 set -e
 set -x
 
-. ./versions.sh
+. ./.env
 . ./functions.sh
 
 ./deploy/infra.sh
@@ -11,6 +11,7 @@ set -x
 ./deploy/oidc/cp.sh
 ./deploy/oidc/cpf.sh
 
+set +x
 wait_for_keycloak
 restart_if_not_ready kafka-0
 restart_if_not_ready kafka-1

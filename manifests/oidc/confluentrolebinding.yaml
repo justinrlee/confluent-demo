@@ -72,3 +72,16 @@ spec:
     name: controlcenter
     type: user
   role: SystemAdmin
+---
+apiVersion: platform.confluent.io/v1beta1
+kind: ConfluentRolebinding
+metadata:
+  name: manual-connect-sr
+  namespace: ${NAMESPACE}
+spec:
+  clustersScopeByIds:
+    schemaRegistryClusterId: id_schemaregistry_confluent-demo
+  principal:
+    name: connect
+    type: user
+  role: SystemAdmin

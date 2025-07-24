@@ -3,7 +3,7 @@
 set -e
 set -x
 
-. ./versions.sh
+. ./.env
 . ./functions.sh
 
 ###### Creates / Installs the following:
@@ -29,7 +29,7 @@ set -x
 
 ### Other
 # CRDs <- not cleaned up
-# Adds repos for helm
+# Adds repos for helm <- todo custom repo name
 
 # Install Ingress Nginx and Confluent Helm Repos
 helm repo add confluentinc https://packages.confluent.io/helm --force-update
@@ -81,8 +81,9 @@ for RESOURCE in \
     kafka \
     connect \
     controlcenter \
+    schemaregistry \
     client \
-    schemaregistry;
+    ;
 do
     export RESOURCE
     envsubst < ./assets/cfssl-cert.json | tee ${CFSSL_DIR}/${RESOURCE}.json
@@ -122,6 +123,8 @@ do
         -storepass confluent \
         -noprompt
 
+    delete_if_deleted secret tls-${RESOURCE}
+
     kubectl create secret generic tls-${RESOURCE} \
         --from-file=cacerts.pem=${CERT_DIR}/ca.crt \
         --from-file=fullchain.pem=${CERT_DIR}/${RESOURCE}.pem \
@@ -131,6 +134,8 @@ do
         --dry-run=client \
         -oyaml | kubectl apply -f -
 done
+
+delete_if_deleted secret tls-client-full
 
 kubectl create secret generic tls-client-full \
     --from-file=ca.crt=${CERT_DIR}/ca.crt \
@@ -143,6 +148,7 @@ kubectl create secret generic tls-client-full \
         --dry-run=client \
     -oyaml | kubectl apply -f -
 
+delete_if_deleted secret mds-token
 
 kubectl create secret generic mds-token \
   --from-file=mdsPublicKey.pem=assets/mds.pub \

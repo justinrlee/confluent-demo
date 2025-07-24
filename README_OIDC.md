@@ -57,13 +57,12 @@ confluent login --url https://kafka:8090 --certificate-authority-path certs/ca.c
 ## TODO
 
 TODO (OIDC Infra)
-* Fix teardown (mirror deploy/cleanup)
+* Fix OIDC for KafkaRestClass for KafkaTopics
 * Get OIDC working for CMF
-* use distinct credentials for different services
-* create other credentials
-* automate keycloak
+* Use distinct credentials for each service
 * add FlinkEnvironment/FlinkApplication authentication/authorization
 * rename 'cmf-rbac' to 'cmf-oidc'
+* Support remote installation
 
 TODO Demo
 * Flink compute pool, catalog, statements

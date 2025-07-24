@@ -1,2 +1,0 @@
-username=cn=admin,dc=confluent,dc=justinrlee,dc=io
-password=GoodNewsEveryone

@@ -58,3 +58,4 @@ confluent flink environment list
 * Add connectors (and plugins) - shoe store
 * Add real Flink job
 * ... other demo things?
+* support remote installation

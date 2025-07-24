@@ -3,7 +3,7 @@
 set -e
 set -x
 
-. ./versions.sh
+. ./.env
 . ./functions.sh
 
 export MANIFEST_DIR=./manifests/keycloak

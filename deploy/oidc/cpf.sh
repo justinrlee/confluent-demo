@@ -3,10 +3,31 @@
 set -e
 set -x
 
-. ./versions.sh
+. ./.env
 . ./functions.sh
 
-# wait_for_cert_manager
+#### Helm
+# FKO
+
+# #### Manifests: manifests/cmf-rbac
+#     ClusterRole/${CMF_SERVICE_ACCOUNT} \
+#     ClusterRoleBinding/${CMF_SERVICE_ACCOUNT} \
+#     CMFRestClass/default \
+#     Role/${CMF_SERVICE_ACCOUNT} \
+#     RoleBinding/${CMF_SERVICE_ACCOUNT} \
+#     ServiceAccount/${CMF_SERVICE_ACCOUNT} \
+
+# #### Secrets
+#     Secret/cmf-encryption-key
+#     Secret/tls-cmf-service
+#     Secret/tls-cmf-full
+
+##### Helm
+# CMF
+
+# #### Manifests: manifests/flink
+#     FlinkApplication/state-machine-example
+#     FlinkEnvironment/${NAMESPACE}
 
 # FKO: disable cert-manager cause it's super flaky
 helm upgrade --install cp-flink-kubernetes-operator \
@@ -17,12 +38,13 @@ helm upgrade --install cp-flink-kubernetes-operator \
     --namespace ${NAMESPACE} \
     --version ${FKO_VERSION}
 
+delete_if_deleted secret cmf-encryption-key
+
 kubectl create secret generic cmf-encryption-key \
         --from-file=encryption-key=./assets/cmf.key \
         --namespace ${NAMESPACE} \
         --dry-run=client -oyaml --save-config \
     | kubectl apply -f -
-
 
 for RESOURCE in \
     cmf-service;
@@ -65,6 +87,8 @@ do
         -storepass confluent \
         -noprompt
 
+    delete_if_deleted secret tls-${RESOURCE}
+
     kubectl create secret generic tls-${RESOURCE} \
         --from-file=cacerts.pem=${CERT_DIR}/ca.crt \
         --from-file=fullchain.pem=${CERT_DIR}/${RESOURCE}.pem \
@@ -75,6 +99,7 @@ do
         -oyaml | kubectl apply -f -
 done
 
+delete_if_deleted secret tls-cmf-full
 
 kubectl create secret generic tls-cmf-full \
     --from-file=ca.crt=${CERT_DIR}/ca.crt \

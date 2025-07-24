@@ -3,27 +3,29 @@
 # set -e
 # set -x
 
-. ./versions.sh
+. ./.env
 . ./functions.sh
 
-# TODO: Clean this up
+# Basic infra
 kubectl -n ${NAMESPACE} delete \
     secret \
-        tls-client-full \
-        admin-ldap-client \
-        kafka-client \
-        kafka-ldap-client \
-        mds-token \
-        rest-client \
-        schemaregistry-client \
         tls-kraft \
         tls-kafka \
         tls-connect \
         tls-controlcenter \
-        tls-schemaregistry
+        tls-schemaregistry \
+        tls-client \
+        tls-client-full \
+        || true
 
-# This shouldn't be running, but sometimes it is
-# kubectl -n ${NAMESPACE} delete flinkdeployment state-machine-example
+# OIDC infra
+kubectl -n ${NAMESPACE} delete \
+    secret \
+        kafka-client \
+        mds-token \
+        rest-client \
+        schemaregistry-client \
+        || true
 
 # gt 2: ignore header lines and CFK operator pod
 while [[ $(kubectl -n ${NAMESPACE} get pods -l confluent-platform=true | wc -l ) -gt 2 ]];
@@ -41,29 +43,15 @@ do
     sleep 10
 done
 
-
-# helm uninstall cmf \
-#     --namespace ${NAMESPACE}
-
-# sleep 10
-
-# helm uninstall cp-flink-kubernetes-operator \
-#     --namespace ${NAMESPACE}
-
-# sleep 10
-
 helm uninstall confluent-for-kubernetes \
     -n ${NAMESPACE}
 
-sleep 10
+sleep 2
 
 helm uninstall ingress-nginx \
     --namespace ${INGRESS_NGINX_NAMESPACE}
 
-# sleep 10
+sleep 2
 
-# kubectl delete -f ./manifests/cert-manager/cert-manager.yaml
-
-sleep 10
-
-kubectl delete namespace ${NAMESPACE}
+kubectl delete namespace ${NAMESPACE} \
+        || true
