@@ -8,7 +8,7 @@ metadata:
 spec:
   replicas: 1
   image:
-    application: confluentinc/cp-schema-registry:${CONFLUENT_PLATFORM_VERSION}
+    application: confluentinc/cp-schema-registry:${CONFLUENT_PLATFORM_SR_VERSION}
     init: confluentinc/confluent-init-container:${CFK_INIT_CONTAINER_VERSION}
   tls:
     secretRef: tls-schemaregistry

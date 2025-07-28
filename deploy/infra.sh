@@ -158,5 +158,9 @@ kubectl create secret generic mds-token \
     --dry-run=client \
     -oyaml | kubectl apply -f -
 
-wait_for_nginx
-wait_for_cfk
+set +x
+wait_for_pod app.kubernetes.io/name=ingress-nginx 1 ${INGRESS_NGINX_NAMESPACE}
+# wait_for_nginx
+wait_for_pod app=confluent-operator
+# wait_for_cfk
+set -x
