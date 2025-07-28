@@ -28,6 +28,6 @@ set -x
 # KafkaTopic/shoe-products
 # KafkaTopic/shoe-orders
 
-export MANIFEST_DIR=./manifests/basic
+export MANIFEST_DIR=./manifests/cfk/basic
 
 deploy_manifests ${MANIFEST_DIR}

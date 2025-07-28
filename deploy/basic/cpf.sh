@@ -114,7 +114,7 @@ kubectl create secret generic tls-cmf-full \
         --dry-run=client \
     -oyaml | kubectl apply -f -
 
-deploy_manifests ./manifests/cmf-basic
+deploy_manifests ./manifests/cmf/basic
 
 envsubst < ./assets/cmf-values-basic.yaml > ${LOCAL_DIR}/cmf-values.yaml
 

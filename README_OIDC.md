@@ -61,7 +61,7 @@ TODO (OIDC Infra)
 * Get OIDC working for CMF
 * Use distinct credentials for each service
 * add FlinkEnvironment/FlinkApplication authentication/authorization
-* rename 'cmf-rbac' to 'cmf-oidc'
+* ~~rename 'cmf-rbac' to 'cmf-oidc'~~
 * Support remote installation
 
 TODO Demo
