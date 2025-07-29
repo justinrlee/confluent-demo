@@ -19,17 +19,24 @@ cmf:
     examples-catalog:
       enabled: true
 
-# mountedVolumes:
-#   volumes:
-#     - name: mds-token
-#       secret:
-#         secretName: mds-token
-#     - name: tls-cmf
-#       secret:
-#         secretName: tls-cmf-full
+mountedVolumes:
+  volumes:
+    - name: mds-token
+      secret:
+        secretName: mds-token
+    - name: tls-cmf
+      secret:
+        secretName: tls-cmf-full
+    - name: tls-client
+      secret:
+        secretName: tls-client-full
 
-#   volumeMounts:
-#     - name: mds-token
-#       mountPath: /mount/mds
-#     - name: tls-cmf
-#       mountPath: /mount/tls
+  volumeMounts:
+    - name: mds-token
+      mountPath: /mount/mds
+    - name: tls-cmf
+      mountPath: /mount/tls
+    - name: tls-client
+      mountPath: /root/certs
+    - name: tls-client
+      mountPath: /mnt/certs

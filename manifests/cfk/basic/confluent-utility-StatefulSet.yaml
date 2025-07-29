@@ -25,10 +25,17 @@ spec:
               value: http://cmf-service.${NAMESPACE}.svc.cluster.local
             - name: CONFLUENT_CMF_CERTIFICATE_AUTHORITY_PATH
               value: /root/certs/ca.crt
+            - name: NAMESPACE
+              value: ${NAMESPACE}
+            - name: CMF_ENVIRONMENT_NAME
+              value: ${NAMESPACE}
           volumeMounts:
             - name: client-tls
               readOnly: true
               mountPath: /root/certs
+            - name: client-tls
+              readOnly: true
+              mountPath: /mnt/certs
       volumes:
         - name: client-tls
           secret:

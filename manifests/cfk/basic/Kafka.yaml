@@ -17,11 +17,11 @@ spec:
     init: confluentinc/confluent-init-container:${CFK_INIT_CONTAINER_VERSION}
   dataVolumeCapacity: 5Gi
   listeners:
-    # INTERNAL: 9071 (mTLS)
+    # INTERNAL: 9071 (TLS)
     internal:
       tls:
         enabled: true
-    # EXTERNAL: 9092 (OIDC)
+    # EXTERNAL: 9092 (TLS)
     external:
       externalAccess:
         type: staticForHostBasedRouting
@@ -31,7 +31,7 @@ spec:
           brokerPrefix: kafka-
       tls:
         enabled: true
-    # REPLICATION: 9072 (mTLS)
+    # REPLICATION: 9072 (TLS)
     replication:
       tls:
         enabled: true

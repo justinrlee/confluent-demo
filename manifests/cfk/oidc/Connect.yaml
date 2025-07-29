@@ -19,6 +19,8 @@ spec:
           - name: kafka-connect-datagen
             owner: confluentinc
             version: 0.6.6
+  keyConverterType: io.confluent.connect.avro.AvroConverter
+  valueConverterType: io.confluent.connect.avro.AvroConverter
   tls:
     secretRef: tls-connect
   authentication:
