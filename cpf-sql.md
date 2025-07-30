@@ -12,13 +12,13 @@ confluent flink --environment ${CMF_ENVIRONMENT_NAME} compute-pool list
 
 kafka-broker-api-versions --bootstrap-server kafka.confluent-demo.svc.cluster.local:9071 --command-config client.properties
 
-curl -v \
+curl \
   -H 'content-type: application/json' \
   -X POST \
   ${CONFLUENT_CMF_URL}/cmf/api/v1/secrets \
   -d@secret-kafka.json
 
-curl -v \
+curl \
   -H 'content-type: application/json' \
   -X POST \
   ${CONFLUENT_CMF_URL}/cmf/api/v1/secrets \
@@ -27,13 +27,13 @@ curl -v \
 # Get secrets
 curl ${CONFLUENT_CMF_URL}/cmf/api/v1/secrets | jq '.'
 
-curl -v \
+curl \
   -H 'content-type: application/json' \
   -X POST \
   ${CONFLUENT_CMF_URL}/cmf/api/v1/environments/${CMF_ENVIRONMENT_NAME}/secret-mappings \
   -d@esm-kafka.json
 
-curl -v \
+curl \
   -H 'content-type: application/json' \
   -X POST \
   ${CONFLUENT_CMF_URL}/cmf/api/v1/environments/${CMF_ENVIRONMENT_NAME}/secret-mappings \

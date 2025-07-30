@@ -3,7 +3,7 @@ apiVersion: platform.confluent.io/v1beta1
 kind: Connector
 metadata:
   name: shoe-orders
-  namespace: confluent-demo
+  namespace: ${NAMESPACE}
 spec:
   class: "io.confluent.kafka.connect.datagen.DatagenConnector"
   taskMax: 1

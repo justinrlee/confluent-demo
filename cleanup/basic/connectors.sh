@@ -10,4 +10,4 @@ set -x
 kubectl -n ${NAMESPACE} delete \
     Connector/shoe-customers \
     Connector/shoe-products \
-    Connector/shoe-orders \
+    Connector/shoe-orders

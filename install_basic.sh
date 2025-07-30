@@ -9,7 +9,7 @@ set -x
 ./deploy/infra.sh
 ./deploy/basic/cp.sh
 ./deploy/basic/cpf.sh
-# ./deploy/basic/connectors.sh
+./deploy/basic/connectors.sh
 
 set +x
 check_for_readiness
