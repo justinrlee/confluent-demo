@@ -36,7 +36,13 @@ spec:
             - name: client-tls
               readOnly: true
               mountPath: /mnt/certs
+            - name: utility-config
+              readOnly: true
+              mountPath: /root/config
       volumes:
         - name: client-tls
           secret:
             secretName: tls-client-full
+        - name: utility-config
+          configMap:
+            name: utility-config

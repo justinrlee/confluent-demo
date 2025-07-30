@@ -21,11 +21,15 @@ spec:
     secretRef: tls-connect
   keyConverterType: io.confluent.connect.avro.AvroConverter
   valueConverterType: io.confluent.connect.avro.AvroConverter
+  # Optimized for demo start time; do not use for production
   podTemplate:
     probe:
       readiness:
-        initialDelaySeconds: 180
-        failureThreshold: 10
+        initialDelaySeconds: 30
+        failureThreshold: 30
+      liveness:
+        initialDelaySeconds: 30
+        failureThreshold: 30
   dependencies:
     kafka:
       bootstrapEndpoint: kafka.${NAMESPACE}.svc.cluster.local:9071

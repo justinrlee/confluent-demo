@@ -14,7 +14,17 @@ spec:
     secretRef: tls-schemaregistry
   configOverrides:
     server:
+      # Only works with 7.9 and below
       - "resource.extension.class=io.confluent.kafka.schemaregistry.rulehandler.RuleSetResourceExtension,io.confluent.dekregistry.DekRegistryResourceExtension"
+  # Optimized for demo start time; do not use for production
+  podTemplate:
+    probe:
+      readiness:
+        initialDelaySeconds: 30
+        failureThreshold: 30
+      liveness:
+        initialDelaySeconds: 30
+        failureThreshold: 30
   dependencies:
     kafka:
       bootstrapEndpoint: kafka.${NAMESPACE}.svc.cluster.local:9071

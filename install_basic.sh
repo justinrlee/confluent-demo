@@ -7,6 +7,7 @@ set -x
 . ./functions.sh
 
 ./deploy/infra.sh
+./deploy/basic/configmap.sh
 ./deploy/basic/cp.sh
 ./deploy/basic/cpf.sh
 ./deploy/basic/connectors.sh

@@ -46,6 +46,10 @@ Confluent CLI should generally work for interacting with CP Flink:
 confluent flink environment list
 ```
 
+### Demo things
+
+See the [basic demo docs](README_BASIC_DEMO.md)
+
 ### Cleanup
 
 ```bash
@@ -54,8 +58,6 @@ confluent flink environment list
 
 ## TODO
 
-* Flink compute pool, catalog, statements (add and remove)
-* Add connectors (and plugins) - shoe store
 * Add real Flink job
 * ... other demo things?
 * support remote installation

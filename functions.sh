@@ -129,7 +129,10 @@ check_for_readiness () {
     # Connect takes forever to start, and is not actually necessary for the C3 UI to come up
     # wait_for connect 1
     wait_for_c3
-    echo 'Access at "https://confluent.127-0-0-1.nip.io"'
+    clear
+    kubectl -n ${NAMESPACE} get pod
+    echo 'Access at Control Center at "https://confluent.127-0-0-1.nip.io"'
+    echo 'Exec into utility pod with `./tools/shell.sh`'
 }
 
 clean_up_flinkdeployment () {
