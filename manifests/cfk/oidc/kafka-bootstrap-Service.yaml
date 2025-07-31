@@ -15,6 +15,5 @@ spec:
   publishNotReadyAddresses: true
   selector:
     app: kafka
-    clusterId: confluent
     confluent-platform: "true"
     type: kafka

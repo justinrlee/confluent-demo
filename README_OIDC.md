@@ -57,6 +57,7 @@ confluent login --url https://kafka:8090 --certificate-authority-path certs/ca.c
 ## TODO
 
 TODO (OIDC Infra)
+* Support custom base domain
 * Fix OIDC for KafkaRestClass for KafkaTopics
 * Get OIDC working for CMF
 * Use distinct credentials for each service

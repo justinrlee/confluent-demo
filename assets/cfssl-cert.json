@@ -3,7 +3,7 @@
     "hosts": [
       "localhost",
       "${RESOURCE}",
-      "*.127-0-0-1.nip.io",
+      "*.${BASE_DOMAIN}",
       "*.${NAMESPACE}.svc.cluster.local",
       "*.${RESOURCE}.${NAMESPACE}.svc.cluster.local"
     ],

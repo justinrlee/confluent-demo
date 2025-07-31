@@ -131,7 +131,7 @@ check_for_readiness () {
     wait_for_c3
     clear
     kubectl -n ${NAMESPACE} get pod
-    echo 'Access at Control Center at "https://confluent.127-0-0-1.nip.io"'
+    echo 'Access at Control Center at "https://confluent.${BASE_DOMAIN}"'
     echo 'Exec into utility pod with `./tools/shell.sh`'
 }
 

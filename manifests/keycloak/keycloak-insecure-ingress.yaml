@@ -8,7 +8,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-    - host: keycloak-insecure.127-0-0-1.nip.io
+    - host: keycloak-insecure.${BASE_DOMAIN}
       http:
         paths:
           - path: /

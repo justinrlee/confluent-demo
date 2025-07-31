@@ -10,10 +10,10 @@ metadata:
 spec:
   tls:
     - hosts:
-      - "*.127-0-0-1.nip.io"
+      - "*.${BASE_DOMAIN}"
   ingressClassName: nginx
   rules:
-  - host: kafka.127-0-0-1.nip.io
+  - host: kafka.${BASE_DOMAIN}
     http:
       paths:
       - path: /
@@ -24,7 +24,7 @@ spec:
             name: kafka-bootstrap
             port:
               number: 9092
-  - host: kafka-0.127-0-0-1.nip.io
+  - host: kafka-0.${BASE_DOMAIN}
     http:
       paths:
       - path: /
@@ -35,7 +35,7 @@ spec:
             name: kafka-0-internal
             port:
               number: 9092
-  - host: kafka-1.127-0-0-1.nip.io
+  - host: kafka-1.${BASE_DOMAIN}
     http:
       paths:
       - path: /
@@ -46,7 +46,7 @@ spec:
             name: kafka-1-internal
             port:
               number: 9092
-  - host: kafka-2.127-0-0-1.nip.io
+  - host: kafka-2.${BASE_DOMAIN}
     http:
       paths:
       - path: /

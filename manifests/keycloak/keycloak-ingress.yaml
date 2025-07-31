@@ -10,10 +10,10 @@ metadata:
 spec:
   tls:
     - hosts:
-        - keycloak.127-0-0-1.nip.io
+        - keycloak.${BASE_DOMAIN}
   ingressClassName: nginx
   rules:
-    - host: keycloak.127-0-0-1.nip.io
+    - host: keycloak.${BASE_DOMAIN}
       http:
         paths:
           - path: /

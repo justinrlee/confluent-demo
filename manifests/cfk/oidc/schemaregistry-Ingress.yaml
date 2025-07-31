@@ -10,10 +10,10 @@ metadata:
 spec:
   tls:
     - hosts:
-      - "*.127-0-0-1.nip.io"
+      - "*.${BASE_DOMAIN}"
   ingressClassName: nginx
   rules:
-  - host: schemaregistry.127-0-0-1.nip.io
+  - host: schemaregistry.${BASE_DOMAIN}
     http:
       paths:
       - path: /
