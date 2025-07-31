@@ -12,6 +12,19 @@ If using Orbstack, use this:
 ./check_orbstack_prereqs.sh
 ```
 
+If installing on some other deployment, update the base domain by using a nip.io address from which your browser can access ingresses running on your Kubernetes cluster.
+* For example, if you're running K3s on a cloud VM, use the public IP address of the VM
+
+```bash
+./tools/set_base_domain.sh <IP-ADDRESS>
+```
+
+Then run this:
+
+```bash
+./check_remote_prereqs.sh
+```
+
 ## Installation: OIDC Demo (Recommended)
 
 Deploy infrastructure (CFK, CMF, FKO, Ingress-NGINX Ingress Controller, various certificates)

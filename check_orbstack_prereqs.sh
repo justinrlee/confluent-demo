@@ -32,6 +32,12 @@ if ! kubectl cluster-info &> /dev/null; then
     exit 1
 fi
 
+echo "Checking if keytool is installed"
+if ! command -v keytool &> /dev/null; then
+    echo "keytool is not installed; try installing a Java runtime (JRE or JDK)"
+    exit 1
+fi
+
 echo "Checking if helm is installed"
 if ! command -v helm &> /dev/null; then
     echo "helm is not installed"
@@ -52,8 +58,8 @@ fi
 
 
 # If we get here, everything is working
-echo "✅ Docker Desktop is installed and running"
-echo "✅ Kubernetes is enabled and running"
+echo "✅ Orbstack is installed and running"
+echo "✅ Kubernetes is enabled and accessible"
 echo "✅ helm is installed"
 echo "✅ openssl is installed"
 echo "✅ cfssl is installed"
