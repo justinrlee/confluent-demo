@@ -138,3 +138,30 @@ kubectl -n confluent-demo get pods
 ```
 
 ... Do other things?
+
+Couple of queries to try (I think these all work)
+
+```sql
+SELECT
+ `window_end`,
+ COUNT(DISTINCT order_id) AS `num_orders`
+FROM TABLE(
+   TUMBLE(TABLE `shoe-orders`, DESCRIPTOR(`$rowtime`), INTERVAL '1' MINUTES))
+GROUP BY `window_start`, `window_end`;
+
+SELECT
+ `window_start`, `window_end`,
+ COUNT(DISTINCT order_id) AS `num_orders`
+FROM TABLE(
+   HOP(TABLE `shoe-orders`, DESCRIPTOR(`$rowtime`), INTERVAL '5' MINUTES, INTERVAL '10' MINUTES))
+GROUP BY `window_start`, `window_end`;
+
+SELECT 
+  `order_id`,
+  `shoe-orders`.`$rowtime`,
+  `first_name`,
+  `last_name` 
+FROM `shoe-orders`
+  INNER JOIN `shoe-customers`
+  ON `shoe-orders`.`customer_id` = `shoe-customers`.`id`;
+```

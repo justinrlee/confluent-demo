@@ -1,5 +1,7 @@
 # Local workstation Confluent demo (with Flink)
 
+## Architecture
+
 This runs a small Confluent Platform cluster on a local workstation, using Docker Desktop and the local Kubernetes
 
 There are two versions:
@@ -38,11 +40,19 @@ Instructions:
     * `helm`
     * `cfssl` - Used for certificate generation
 
-Go to one of these two docs:
-* [Basic Mode](README_BASIC.md)
-* [OIDC Mode](README_OIDC.md)
+## Start Here
 
-## TODO (Repo)
+Go to one of these two docs to install everything
+
+* [Basic Mode](README_BASIC.md) - much more feature complete
+* [OIDC Mode](README_OIDC.md) - not feature complete
+
+Then, once basic mode is installed, go to this doc for a Flink SQL quick start:
+
+* [Basic Mode Demo](README_BASIC_DEMO.md)
+
+## TODO (Repo-level)
+
 * Refactor
 * Improve Documentation
 * Look at Kubernetes Gateway API
