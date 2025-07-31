@@ -6,7 +6,7 @@ metadata:
   namespace: ${NAMESPACE}
 spec:
   replicas: 3
-  partitionCount: 1
+  partitionCount: 3
   kafkaRestClassRef:
     name: default
     namespace: ${NAMESPACE}
@@ -18,7 +18,7 @@ metadata:
   namespace: ${NAMESPACE}
 spec:
   replicas: 3
-  partitionCount: 1
+  partitionCount: 3
   kafkaRestClassRef:
     name: default
     namespace: ${NAMESPACE}
@@ -30,7 +30,7 @@ metadata:
   namespace: ${NAMESPACE}
 spec:
   replicas: 3
-  partitionCount: 1
+  partitionCount: 3
   kafkaRestClassRef:
     name: default
     namespace: ${NAMESPACE}
