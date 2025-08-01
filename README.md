@@ -55,9 +55,13 @@ OIDC Mode - WIP
 ## TODO (Repo-level)
 
 * Refactor
+    * Combine prereq scripts
+    * Combine install/uninstall scripts
+    * Refactor certificate generation into function
+* Look at jq templating for basic vs. oidc
 * Improve Documentation
 * Look at Kubernetes Gateway API
-* Move versions.sh > .env
+* ~~Move versions.sh > .env~~
 * ~~rearrange installation / uninstallation scripts to use functions~~
 * ~~Size CPU / Memory~~
 * ~~Cleanup scripts~~

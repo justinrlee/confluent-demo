@@ -4,9 +4,9 @@
 
 # If a resource has a deletionTimestamp, remove finalizers and delete it
 # Sample Usage (either should work):
-    # delete_if_deleted Secret mds-token
-    # delete_if_deleted Secret/mds-token
-delete_if_deleted () {
+    # remove_if_deleted Secret mds-token
+    # remove_if_deleted Secret/mds-token
+remove_if_deleted () {
     if [[ $(kubectl -n ${NAMESPACE} get $1 $2 -ojsonpath='{.metadata.deletionTimestamp}' | wc -c) -gt 0 ]];
     then
         echo "Removing finalizers for $1 $2"

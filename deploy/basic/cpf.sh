@@ -40,10 +40,10 @@ helm upgrade --install cp-flink-kubernetes-operator \
 
 # TODO: Update CRDs?
 
-delete_if_deleted secret cmf-encryption-key
+remove_if_deleted secret cmf-encryption-key
 
 kubectl create secret generic cmf-encryption-key \
-        --from-file=encryption-key=./assets/cmf.key \
+        --from-file=encryption-key=./assets/cmf/cmf.key \
         --namespace ${NAMESPACE} \
         --dry-run=client -oyaml --save-config \
     | kubectl apply -f -
@@ -89,7 +89,7 @@ do
         -storepass confluent \
         -noprompt
 
-    delete_if_deleted secret tls-${RESOURCE}
+    remove_if_deleted secret tls-${RESOURCE}
 
     kubectl create secret generic tls-${RESOURCE} \
         --from-file=cacerts.pem=${CERT_DIR}/ca.crt \
@@ -101,7 +101,7 @@ do
         -oyaml | kubectl apply -f -
 done
 
-delete_if_deleted secret tls-cmf-full
+remove_if_deleted secret tls-cmf-full
 
 kubectl create secret generic tls-cmf-full \
     --from-file=ca.crt=${CERT_DIR}/ca.crt \
@@ -116,7 +116,7 @@ kubectl create secret generic tls-cmf-full \
 
 deploy_manifests ./assets/manifests/cmf/basic
 
-envsubst < ./assets/cmf-values-basic.yaml > ${LOCAL_DIR}/cmf-values.yaml
+envsubst < ./assets/cmf/values-basic.yaml > ${LOCAL_DIR}/cmf-values.yaml
 
 # CMF
 helm upgrade --install cmf \

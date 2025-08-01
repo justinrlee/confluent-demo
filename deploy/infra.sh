@@ -123,7 +123,7 @@ do
         -storepass confluent \
         -noprompt
 
-    delete_if_deleted secret tls-${RESOURCE}
+    remove_if_deleted secret tls-${RESOURCE}
 
     kubectl create secret generic tls-${RESOURCE} \
         --from-file=cacerts.pem=${CERT_DIR}/ca.crt \
@@ -135,7 +135,7 @@ do
         -oyaml | kubectl apply -f -
 done
 
-delete_if_deleted secret tls-client-full
+remove_if_deleted secret tls-client-full
 
 kubectl create secret generic tls-client-full \
     --from-file=ca.crt=${CERT_DIR}/ca.crt \
@@ -148,11 +148,11 @@ kubectl create secret generic tls-client-full \
         --dry-run=client \
     -oyaml | kubectl apply -f -
 
-delete_if_deleted secret mds-token
+remove_if_deleted secret mds-token
 
 kubectl create secret generic mds-token \
-  --from-file=mdsPublicKey.pem=assets/mds.pub \
-  --from-file=mdsTokenKeyPair.pem=assets/mds.key \
+  --from-file=mdsPublicKey.pem=assets/mds/mds.pub \
+  --from-file=mdsTokenKeyPair.pem=assets/mds/mds.key \
   --namespace ${NAMESPACE} \
     --save-config \
     --dry-run=client \
