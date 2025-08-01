@@ -1,6 +1,6 @@
 #!/bin/bash
 
-./cleanup/oidc/cpf.sh
-./cleanup/oidc/cp.sh
-./cleanup/keycloak.sh
-./cleanup/infra.sh
+./removeoidc/cpf.sh
+./remove/oidc/cp.sh
+./remove/keycloak.sh
+./remove/infra.sh

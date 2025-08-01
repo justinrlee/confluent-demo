@@ -51,7 +51,7 @@ confluent login --url https://kafka:8090 --certificate-authority-path certs/ca.c
 ### Cleanup
 
 ```bash
-./remove_oidc.sh
+./uninstall_oidc.sh
 ```
 
 ## TODO

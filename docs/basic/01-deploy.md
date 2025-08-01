@@ -59,18 +59,15 @@ Confluent CLI should generally work for interacting with CP Flink:
 confluent flink environment list
 ```
 
-### Demo things
+### Next Steps
 
-See the [basic demo docs](README_BASIC_DEMO.md)
-
-### Cleanup
-
-```bash
-./remove_basic.sh
-```
+* [Data Governance (CSFLE) Demo](./02-data-governance.md)
+* [CP Flink SQL Demo](./03-flink-sql-demo.md)
+* [Cleanup](./99-cleanup.md)
 
 ## TODO
 
 * Add real Flink job
+* do the rest of data governance
 * ... other demo things?
 * support remote installation

@@ -1,4 +1,6 @@
-# Demo Flink SQL (in Basic Mode)
+## Demo Flink SQL (in Basic Mode)
+
+After doing the initial deployment (instructions in [Basic Setup](./01-deploy.md)), you can run the CP Flink SQL demo
 
 Everything should be run from the utility pod, which has direct access to CFK and CMF from within the cluster.
 

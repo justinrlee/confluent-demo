@@ -2,7 +2,7 @@
 
 **This is currently only a very simple CSFLE demo**
 
-After doing the initial deployment (instructions in [Basic Setup](../README_BASIC.md)), do the Data Governance demo (currently only includes CSFLE)
+After doing the initial deployment (instructions in [Basic Setup](./01-deploy.md)), you can run the Data Governance demo (currently only includes CSFLE)
 
 Everything should be run from the utility pod, which has direct access to CFK and CMF from within the cluster.
 
@@ -42,7 +42,10 @@ tee schema.json <<-'EOF'
     },
     {
       "name": "name",
-      "type": "string"
+      "type": "string",
+      "confluent:tags": [
+        "PII"
+      ]
     },
     {
       "name": "birthday",

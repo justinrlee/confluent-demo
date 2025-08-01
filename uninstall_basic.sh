@@ -1,9 +1,9 @@
 #!/bin/bash
 
-./cleanup/vault.sh
-./cleanup/basic/cmf_children.sh
-./cleanup/basic/connectors.sh
-./cleanup/basic/cpf.sh
-./cleanup/basic/cp.sh
-./cleanup/basic/configmap.sh
-./cleanup/infra.sh
+./remove/vault.sh
+./remove/basic/cmf_children.sh
+./remove/basic/connectors.sh
+./remove/basic/cpf.sh
+./remove/basic/cp.sh
+./remove/basic/configmap.sh
+./remove/infra.sh
