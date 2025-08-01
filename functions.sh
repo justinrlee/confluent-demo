@@ -35,7 +35,7 @@ wait_for_pod () {
     while [[ $(kubectl -n ${NS} get pods -l ${LABEL_SELECTOR} | grep "1/1" | grep "Running" | wc -l ) -lt ${POD_COUNT} ]]; 
     do
         clear
-        echo "Waiting for ${LABEL_SELECTOR} to be ready..."
+        echo "Waiting 2s for ${LABEL_SELECTOR} to be ready..."
         echo "Filtered pods:"
         kubectl -n ${NS} get pods -l ${LABEL_SELECTOR}
         echo ""
@@ -54,7 +54,7 @@ wait_for_c3 () {
     while [[ $(kubectl -n ${NAMESPACE} get pods -l app=controlcenter | grep '3/3' | grep "Running" | wc -l) -lt 1 ]];
     do
         clear
-        echo "Waiting for ControlCenter pod to be ready..."
+        echo "Waiting 10s for ControlCenter pod to be ready..."
         echo "Filtered pods:"
         kubectl -n ${NAMESPACE} get pods -l app=controlcenter
         echo ""
@@ -138,7 +138,7 @@ check_for_readiness () {
 clean_up_flinkdeployment () {
     while [[ $(kubectl -n ${NAMESPACE} get FlinkDeployment -oname | wc -w ) -gt 0 ]]; 
     do
-        echo "Waiting for FlinkDeployments to be removed ..."
+        echo "Waiting 2s for FlinkDeployments to be removed ..."
         kubectl -n ${NAMESPACE} get FlinkDeployment
         sleep 2
     done

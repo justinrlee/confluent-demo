@@ -44,12 +44,13 @@ Instructions:
 
 Go to one of these two docs to install everything
 
-* [Basic Mode](README_BASIC.md) - much more feature complete
-* [OIDC Mode](README_OIDC.md) - not feature complete
+Basic Mode - moderately feature complete
+* [Basic Mode Installation](./docs/basic/01-deploy.md)
+* [Basic Mode CSFLE Demo](./docs/basic/02-data-governance.md)
+* [Basic Mode CP Flink SQL Demo](./docs/basic/03-flink-sql-demo.md)
 
-Then, once basic mode is installed, go to this doc for a Flink SQL quick start:
-
-* [Basic Mode Demo](README_BASIC_DEMO.md)
+OIDC Mode - WIP
+* [OIDC Mode Installation](./docs/oidc/01-deploy.md)
 
 ## TODO (Repo-level)
 

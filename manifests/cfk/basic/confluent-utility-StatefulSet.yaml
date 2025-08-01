@@ -29,6 +29,14 @@ spec:
               value: ${NAMESPACE}
             - name: CMF_ENVIRONMENT_NAME
               value: ${NAMESPACE}
+            - name: VAULT_ADDR
+              value: http://vault.vault.svc.cluster.local:8200
+            - name: VAULT_TOKEN
+              value: root
+            - name: BS
+              value: kafka.confluent-demo.svc.cluster.local:9071
+            - name: SR
+              value: https://schemaregistry.confluent-demo.svc.cluster.local:8081
           volumeMounts:
             - name: client-tls
               readOnly: true
