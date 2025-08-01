@@ -1,1 +1,0 @@
-uninstall_basic.sh
