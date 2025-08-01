@@ -24,7 +24,6 @@ delete_if_deleted () {
 # wait_for_pod app=schemaregistry
 # wait_for_pod app=kafka 3
 # wait_for_pod app.kubernetes.io/name=ingress-nginx 1 ingress-nginx
-
 wait_for_pod () {
     export LABEL_SELECTOR=${1}
     export POD_COUNT=${2:-1}
@@ -35,7 +34,7 @@ wait_for_pod () {
     while [[ $(kubectl -n ${NS} get pods -l ${LABEL_SELECTOR} | grep "1/1" | grep "Running" | wc -l ) -lt ${POD_COUNT} ]]; 
     do
         clear
-        echo "Waiting 2s for ${LABEL_SELECTOR} to be ready..."
+        echo "Waiting 5s for ${POD_COUNT}x pods with label ${LABEL_SELECTOR} to be ready..."
         echo "Filtered pods:"
         kubectl -n ${NS} get pods -l ${LABEL_SELECTOR}
         echo ""
@@ -45,16 +44,17 @@ wait_for_pod () {
         echo "Logs:"
         kubectl -n ${NS} logs -l ${LABEL_SELECTOR} --tail 5 || true
         echo ""
-        sleep 2
+        sleep 5
     done
 
 }
 
+# special behavior to account for 3/3 containers in the pod
 wait_for_c3 () {
     while [[ $(kubectl -n ${NAMESPACE} get pods -l app=controlcenter | grep '3/3' | grep "Running" | wc -l) -lt 1 ]];
     do
         clear
-        echo "Waiting 10s for ControlCenter pod to be ready..."
+        echo "Waiting 5s for ControlCenter pod to be ready..."
         echo "Filtered pods:"
         kubectl -n ${NAMESPACE} get pods -l app=controlcenter
         echo ""
@@ -64,47 +64,9 @@ wait_for_c3 () {
         echo "Logs:"
         kubectl -n ${NAMESPACE} logs -l app=controlcenter -c controlcenter --tail 10 || true
         echo ""
-        sleep 10
+        sleep 5
     done
 }
-
-# wait_for_cfk () {
-#     while [[ $(kubectl -n ${OPERATOR_NAMESPACE} get pods -l app=confluent-operator | grep "1/1" | grep "Running" | wc -l ) -lt 1 ]]; 
-#     do
-#         echo "Waiting for CFK to be ready..."
-#         sleep 10
-#     done
-# }
-
-# wait_for_nginx () {
-#     while [[ $(kubectl -n ${INGRESS_NGINX_NAMESPACE} get pods -l app.kubernetes.io/name=ingress-nginx | grep "1/1" | grep "Running" | wc -l ) -lt 1 ]]; 
-#     do
-#         echo "Waiting for CFK to be ready..."
-#         sleep 10
-#     done
-# }
-
-# wait_for () {
-#     while [[ $(kubectl -n ${NAMESPACE} get pods -l app=${1} | grep "1/1" | grep "Running" | wc -l ) -lt ${2} ]]; 
-#     do
-#         echo "Waiting for ${1} to be ready..."
-#         echo "Filtered pods:"
-#         kubectl -n ${NAMESPACE} get pods -l app=${1}
-#         echo "All pods:"
-#         kubectl -n ${NAMESPACE} get pods
-#         echo ""
-#         sleep 5
-#     done
-# }
-
-# wait_for_keycloak() {
-#     while [[ $(kubectl -n ${KEYCLOAK_NAMESPACE} get pods -l app=keycloak | grep "1/1" | grep "Running" | wc -l ) -lt 1 ]]; 
-#     do
-#         echo "Waiting for Keycloak to be ready..."
-#         kubectl -n ${KEYCLOAK_NAMESPACE} get pods
-#         sleep 10
-#     done
-# }
 
 restart_if_not_ready () {
     if [[ $(kubectl -n ${NAMESPACE} get pod ${1} | grep "1/1" | grep "Running" | wc -l ) -lt 1 ]];
@@ -121,6 +83,8 @@ check_for_readiness () {
     # wait_for kafka 3
 
     # Once Kafka is ready, restart all dependent pods, which are often in a crashloop at this points
+    clear
+    echo "Kafka cluster ready, restarting dependent pods..."
     restart_if_not_ready schemaregistry-0
     restart_if_not_ready connect-0
     restart_if_not_ready controlcenter-0
@@ -131,6 +95,8 @@ check_for_readiness () {
     wait_for_c3
     clear
     kubectl -n ${NAMESPACE} get pod
+    echo ""
+    echo "Demo is ready!"
     echo "Access Confluent Control Center at 'https://confluent.${BASE_DOMAIN}'"
     echo 'Exec into utility pod with `./tools/shell.sh`'
 }
@@ -138,8 +104,9 @@ check_for_readiness () {
 clean_up_flinkdeployment () {
     while [[ $(kubectl -n ${NAMESPACE} get FlinkDeployment -oname | wc -w ) -gt 0 ]]; 
     do
-        echo "Waiting 2s for FlinkDeployments to be removed ..."
+        echo ""
         kubectl -n ${NAMESPACE} get FlinkDeployment
+        echo "Waiting 2s for FlinkDeployments to be removed ..."
         sleep 2
     done
 }

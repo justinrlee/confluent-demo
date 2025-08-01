@@ -6,7 +6,7 @@ set -x
 . ./.env
 . ./functions.sh
 
-export MANIFEST_DIR=./manifests/keycloak
+export MANIFEST_DIR=./assets/manifests/keycloak
 
 export CERT_DIR=${LOCAL_DIR}/certs
 export CFSSL_DIR=${LOCAL_DIR}/cfssl

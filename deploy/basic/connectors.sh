@@ -8,6 +8,6 @@ set -x
 
 ###### manifests/basic includes these objects:
 
-export MANIFEST_DIR=./manifests/connectors/basic
+export MANIFEST_DIR=./assets/manifests/connectors/basic
 
 deploy_manifests ${MANIFEST_DIR}

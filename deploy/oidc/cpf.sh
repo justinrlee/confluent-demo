@@ -112,7 +112,7 @@ kubectl create secret generic tls-cmf-full \
         --dry-run=client \
     -oyaml | kubectl apply -f -
 
-deploy_manifests ./manifests/cmf/oidc
+deploy_manifests ./assets/manifests/cmf/oidc
 
 envsubst < ./assets/cmf-values-oidc.yaml > ${LOCAL_DIR}/cmf-values.yaml
 
@@ -123,4 +123,4 @@ helm upgrade --install cmf \
     --namespace ${NAMESPACE} \
     --version ${CMF_VERSION}
 
-deploy_manifests ./manifests/flink
+deploy_manifests ./assets/manifests/flink

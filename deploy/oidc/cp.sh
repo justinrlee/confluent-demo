@@ -48,7 +48,7 @@ set -x
 # controlcenter-oauth-jaas
 # cmf-oauth-jaas
 
-export MANIFEST_DIR=./manifests/cfk/oidc
+export MANIFEST_DIR=./assets/manifests/cfk/oidc
 
 tee ${LOCAL_DIR}/oauth_jaas.txt <<-'EOF'
 clientId=kafka
