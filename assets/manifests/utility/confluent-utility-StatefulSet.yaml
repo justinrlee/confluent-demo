@@ -22,7 +22,7 @@ spec:
           image: justinrlee/confluent-utility:latest
           env:
             - name: CONFLUENT_CMF_URL
-              value: http://cmf-service.${NAMESPACE}.svc.cluster.local
+              value: http://cmf.${NAMESPACE}.svc.cluster.local
             - name: CONFLUENT_CMF_CERTIFICATE_AUTHORITY_PATH
               value: /root/certs/ca.crt
             - name: NAMESPACE
@@ -50,7 +50,7 @@ spec:
       volumes:
         - name: client-tls
           secret:
-            secretName: tls-client-full
+            secretName: tls-client
         - name: utility-config
           configMap:
             name: utility-config

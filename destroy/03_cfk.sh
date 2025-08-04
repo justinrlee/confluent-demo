@@ -15,7 +15,6 @@ kubectl -n ${NAMESPACE} delete \
         tls-controlcenter \
         tls-schemaregistry \
         tls-client \
-        tls-client-full \
         || true
 
 # OIDC infra
@@ -48,13 +47,5 @@ helm uninstall confluent-for-kubernetes \
 
 sleep 2
 
-helm uninstall ingress-nginx \
-    --namespace ${INGRESS_NGINX_NAMESPACE}
-
-sleep 2
-
 kubectl delete namespace ${NAMESPACE} \
-        || true
-
-kubectl delete namespace ${INGRESS_NGINX_NAMESPACE} \
         || true

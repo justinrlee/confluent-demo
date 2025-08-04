@@ -20,7 +20,7 @@ The `confluent` CLI uses these environment variables by default (these are set a
 
 ```bash
 CONFLUENT_CMF_CERTIFICATE_AUTHORITY_PATH=/root/certs/ca.crt
-CONFLUENT_CMF_URL=http://cmf-service.confluent-demo.svc.cluster.local
+CONFLUENT_CMF_URL=http://cmf.confluent-demo.svc.cluster.local
 ```
 
 Also, there are number of pre-seeded config files in `./config/` (`/root/config/`)

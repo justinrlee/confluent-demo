@@ -5,7 +5,7 @@ metadata:
   namespace: ${NAMESPACE}
 spec:
   cmfRest:
-    endpoint: http://cmf-service.${NAMESPACE}.svc.cluster.local
+    endpoint: http://cmf.${NAMESPACE}.svc.cluster.local
     authentication:
       type: oauth
       oauth:

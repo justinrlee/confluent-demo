@@ -32,9 +32,9 @@ kubectl -n ${NAMESPACE} delete \
         || true
 
 kubectl -n ${NAMESPACE} delete \
-    Secret/tls-cmf-full \
-    Secret/tls-cmf-service \
     Secret/cmf-encryption-key \
+    Secret/tls-cmf \
+    # Secret/tls-cmf-full \
         || true
 
 helm -n ${NAMESPACE} uninstall cp-flink-kubernetes-operator

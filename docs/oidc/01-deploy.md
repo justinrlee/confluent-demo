@@ -53,20 +53,3 @@ confluent login --url https://kafka:8090 --certificate-authority-path certs/ca.c
 ```bash
 ./uninstall_oidc.sh
 ```
-
-## TODO
-
-TODO (OIDC Infra)
-* Support custom base domain
-* Fix OIDC for KafkaRestClass for KafkaTopics
-* Get OIDC working for CMF
-* Use distinct credentials for each service
-* add FlinkEnvironment/FlinkApplication authentication/authorization
-* ~~rename 'cmf-rbac' to 'cmf-oidc'~~
-* Support remote installation
-
-TODO Demo
-* Flink compute pool, catalog, statements
-* Add connectors (and plugins) - shoe store
-* Add real Flink job
-* ... other demo things?

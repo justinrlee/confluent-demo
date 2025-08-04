@@ -25,6 +25,7 @@ remove_if_deleted () {
 # wait_for_pod app=kafka 3
 # wait_for_pod app.kubernetes.io/name=ingress-nginx 1 ingress-nginx
 wait_for_pod () {
+    set +x
     export LABEL_SELECTOR=${1}
     export POD_COUNT=${2:-1}
     export NS=${3:-${NAMESPACE}}
@@ -46,7 +47,6 @@ wait_for_pod () {
         echo ""
         sleep 5
     done
-
 }
 
 # special behavior to account for 3/3 containers in the pod
@@ -77,6 +77,7 @@ restart_if_not_ready () {
 }
 
 check_for_readiness () {
+    set +x
     wait_for_pod app=kraft
     # wait_for kraft 1
     wait_for_pod app=kafka 3
@@ -127,12 +128,19 @@ deploy_manifests () {
     done
 }
 
+copy_ca_certs () {
+    cp ./assets/certificates/ca.crt ${CERT_DIR}/ca.crt
+    cp ./assets/certificates/ca.key ${CERT_DIR}/ca.key
+    cp ./assets/certificates/cfssl-ca.json ${CFSSL_DIR}/cfssl-ca.json
+    cp ./assets/certificates/cfssl-cert.json ${CFSSL_DIR}/cfssl-cert.json
+}
+
 create_certificate_secret () {
     export RESOURCE=${1}
 
-    echo "Creating certificate secret for ${1}"
+    echo "Creating certificate secret for ${RESOURCE}"
 
-    envsubst < ./assets/cfssl-cert.json | tee ${CFSSL_DIR}/${RESOURCE}.json
+    envsubst < ${CFSSL_DIR}/cfssl-cert.json | tee ${CFSSL_DIR}/${RESOURCE}.json
 
     echo ''
 
@@ -177,6 +185,9 @@ create_certificate_secret () {
 
     kubectl create secret generic tls-${RESOURCE} \
         --from-file=cacerts.pem=${CERT_DIR}/ca.crt \
+        --from-file=ca.crt=${CERT_DIR}/ca.crt \
+        --from-file=${RESOURCE}.crt=${CERT_DIR}/${RESOURCE}.pem \
+        --from-file=${RESOURCE}.key=${CERT_DIR}/${RESOURCE}-key.pem \
         --from-file=fullchain.pem=${CERT_DIR}/${RESOURCE}.pem \
         --from-file=privkey.pem=${CERT_DIR}/${RESOURCE}-key.pem \
         --from-file=truststore.p12=${CERT_DIR}/${RESOURCE}-truststore.p12 \

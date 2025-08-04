@@ -32,5 +32,5 @@ wait_for_pod app.kubernetes.io/name=vault 1 ${VAULT_NAMESPACE}
 # Ingress/vault
 deploy_manifests ${MANIFEST_DIR}
 
-kubectl -n ${VAULT_NAMESPACE} exec -it vault-0 -- sh -c "vault secrets enable transit"
-kubectl -n ${VAULT_NAMESPACE} exec -it vault-0 -- sh -c "vault write -f transit/keys/csfle"
+kubectl -n ${VAULT_NAMESPACE} exec -it vault-0 -- sh -c "vault secrets enable transit" || true
+kubectl -n ${VAULT_NAMESPACE} exec -it vault-0 -- sh -c "vault write -f transit/keys/csfle" || true

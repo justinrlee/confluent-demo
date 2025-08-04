@@ -6,10 +6,20 @@ set -x
 . ./.env
 . ./functions.sh
 
-###### Install Infra
-# Namespace: confluent-demo
+###### Install NGINX
 # Namespace: ingress-nginx
 # Helm: Ingress NGINX
+./deploy/01_nginx.sh
+
+###### Deploy Vault
+# Namespace: vault
+# Helm: vault
+# Manifest: Ingress/vault
+# Enable transit secret engine and create key
+./deploy/02_vault.sh
+
+###### Install Infra
+# Namespace: confluent-demo
 # Helm: CFK
 # Certs:
     # kraft
@@ -19,59 +29,19 @@ set -x
     # schemaregistry
     # client
 # Secrets
-    # tls-client-full
     # mds-token
 # Waits
-./deploy/infra.sh
+./deploy/03_cfk.sh
 
-###### Deploy confluent-utility container and configmap
-./deploy/utility.sh
+./deploy/04_utility.sh
 
-###### Deploy basic CFK manifests
-# KRaftController/kraft
+# Keycloak is not part of the basic install
+# ./deploy/05_keycloak.sh
 
-# Kafka/kafka
-# Ingress/kafka
-# Service/kafka-bootstrap
-# KafkaRestClass/default
+./deploy/10_cp_basic.sh
+./deploy/11_cpf_basic.sh
 
-# SchemaRegistry/schemaregistry
-# Ingress/schemaregistry
+./deploy/20_topics.sh
+./deploy/21_connectors.sh
 
-# Connect/connect
-
-# ControlCenter/controlcenter
-# Ingress/controlcenter
-
-# KafkaTopic/shoe-customers
-# KafkaTopic/shoe-products
-# KafkaTopic/shoe-orders
-./deploy/basic/cp.sh
-
-###### Deploy CMF and FKO
-# Helm: FKO
-# Helm: CMF - depends on CFK
-# Secrets
-    # cmf-encryption-key
-    # tls-cmf-service
-    # tls-cmf-full
-# Manifests
-    # FlinkApplication/state-machine-example
-    # FlinkEnvironment/confluent-demo
-./deploy/basic/cpf.sh
-
-###### Deploy connectors
-# * shoe-customers
-# * shoe-products
-# * shoe-orders
-./deploy/basic/connectors.sh
-
-###### Deploy Vault
-# Namespace: vault
-# Helm: vault
-# Manifest: Ingress/vault
-# Enable transit secret engine and create key
-./deploy/vault.sh
-
-set +x
 check_for_readiness

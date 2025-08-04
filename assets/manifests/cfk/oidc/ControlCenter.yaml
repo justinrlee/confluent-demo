@@ -17,7 +17,7 @@ spec:
       - confluent.controlcenter.ksql.enable=false
       - confluent.controlcenter.ui.replicator.monitoring.enable=false
       - confluent.controlcenter.cmf.enable=true
-      - confluent.controlcenter.cmf.url=http://cmf-service.confluent-demo.svc.cluster.local
+      - confluent.controlcenter.cmf.url=http://cmf.${NAMESPACE}.svc.cluster.local
   dependencies:
     mds:
       ssoProtocol: oidc

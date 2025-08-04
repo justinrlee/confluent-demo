@@ -15,10 +15,10 @@ mkdir -p $CERT_DIR $CFSSL_DIR
 kubectl create namespace ${KEYCLOAK_NAMESPACE} --dry-run=client -oyaml | kubectl apply -f -
 
 ## Deploy manifests
-cp ./assets/ca.crt ${CERT_DIR}/ca.crt
-cp ./assets/ca.key ${CERT_DIR}/ca.key
-cp ./assets/cfssl-ca.json ${CFSSL_DIR}/cfssl-ca.json
-cp ./assets/cfssl-cert.json ${CFSSL_DIR}/cfssl-cert.json
+cp ./assets/certificates/ca.crt ${CERT_DIR}/ca.crt
+cp ./assets/certificates/ca.key ${CERT_DIR}/ca.key
+cp ./assets/certificates/cfssl-ca.json ${CFSSL_DIR}/cfssl-ca.json
+cp ./assets/certificates/cfssl-cert.json ${CFSSL_DIR}/cfssl-cert.json
 
 openssl x509 -in ${CERT_DIR}/ca.crt -text -noout
 

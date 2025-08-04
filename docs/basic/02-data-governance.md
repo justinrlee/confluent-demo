@@ -29,62 +29,13 @@ vault kv list transit/keys
 Create basic schema:
 
 ```bash
-# Create schema
-tee schema.json <<-'EOF'
-{
-  "name": "PersonalData",
-  "type": "record",
-  "namespace": "demo",
-  "fields": [
-    {
-      "name": "id",
-      "type": "string"
-    },
-    {
-      "name": "name",
-      "type": "string",
-      "confluent:tags": [
-        "PII"
-      ]
-    },
-    {
-      "name": "birthday",
-      "type": "string",
-      "confluent:tags": [
-        "PII"
-      ]
-    }
-  ]
-}
-EOF
-
-# Create encryption rule
-tee encryptPII.json <<-'EOF'
-{
-  "name": "encryptPII",
-  "kind": "TRANSFORM",
-  "type": "ENCRYPT",
-  "mode": "WRITEREAD",
-  "tags": [
-    "PII"
-  ],
-  "params": {
-    "encrypt.kek.name": "csfle-hashicorp",
-    "encrypt.kms.key.id": "http://vault.vault.svc.cluster.local:8200/transit/keys/csfle",
-    "encrypt.kms.type": "hcvault",
-    "encrypt.dek.expiry.days": 7
-  },
-  "onFailure": "ERROR,NONE"
-}
-EOF
-
 jq -s '{
     schema: (.[0] | tojson),
     schemaType: "AVRO",
     ruleSet: {
         domainRules: [.[1]]
     }
-}' schema.json encryptPII.json > csfle.json
+}' config/csfle-schema.json config/csfle-encryptionRule.json > csfle.json
 
 # Create a topic
 kafka-topics --bootstrap-server ${BS} --command-config config/client.properties --create --topic csfle --replication-factor=3
