@@ -58,9 +58,16 @@ OIDC Mode - WIP
     * Combine prereq scripts
     * Combine install/uninstall scripts
     * Refactor certificate generation into function
-* Look at jq templating for basic vs. oidc
+* Look at jq or kustomize templating for basic vs. oidc
 * Improve Documentation
 * Look at Kubernetes Gateway API
+* Data governance stuff
+* Move CP CSFLE manifests to container
+* Refactor to single:
+    * utility
+    * vault
+    * connectors
+    * topics
 * ~~Move versions.sh > .env~~
 * ~~rearrange installation / uninstallation scripts to use functions~~
 * ~~Size CPU / Memory~~

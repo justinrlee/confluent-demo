@@ -5,5 +5,5 @@
 ./remove/basic/connectors.sh
 ./remove/basic/cpf.sh
 ./remove/basic/cp.sh
-./remove/basic/configmap.sh
+./remove/utility.sh
 ./remove/infra.sh

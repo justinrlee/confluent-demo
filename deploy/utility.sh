@@ -14,3 +14,7 @@ kubectl create configmap utility-config \
     -oyaml > ${LOCAL_DIR}/utility-config.yaml
 
 kubectl -n ${NAMESPACE} apply -f ${LOCAL_DIR}/utility-config.yaml
+
+export MANIFEST_DIR=./assets/manifests/utility
+
+deploy_manifests ${MANIFEST_DIR}

@@ -41,8 +41,4 @@ kubectl -n ${NAMESPACE} delete \
     kraftcontroller/kraft \
         || true
 
-kubectl -n ${NAMESPACE} delete \
-    statefulset/confluent-utility \
-        || true
-
 # Manually created (TODO)

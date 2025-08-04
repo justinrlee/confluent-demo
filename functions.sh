@@ -126,3 +126,63 @@ deploy_manifests () {
         kubectl apply -f ${LOCAL_DIR}/${f}
     done
 }
+
+create_certificate_secret () {
+    export RESOURCE=${1}
+
+    echo "Creating certificate secret for ${1}"
+
+    envsubst < ./assets/cfssl-cert.json | tee ${CFSSL_DIR}/${RESOURCE}.json
+
+    echo ''
+
+    rm -f ${CERT_DIR}/${RESOURCE}*
+
+    # Generate certificates
+    cfssl gencert \
+        -ca ${CERT_DIR}/ca.crt \
+        -ca-key ${CERT_DIR}/ca.key \
+        -config ${CFSSL_DIR}/cfssl-ca.json \
+        -profile server \
+        ${CFSSL_DIR}/${RESOURCE}.json | cfssljson -bare ${CERT_DIR}/${RESOURCE}
+
+    # Create server P12
+    openssl pkcs12 -export \
+        -in ${CERT_DIR}/${RESOURCE}.pem \
+        -inkey ${CERT_DIR}/${RESOURCE}-key.pem \
+        -out ${CERT_DIR}/${RESOURCE}.p12 \
+        -name ${RESOURCE} \
+        -CAfile ${CERT_DIR}/ca.crt \
+        -caname CARoot \
+        -passin pass:confluent \
+        -password pass:confluent
+
+    # Import CA into server P12
+    keytool -importcert \
+        -keystore ${CERT_DIR}/${RESOURCE}.p12 \
+        -alias CAroot \
+        -file ${CERT_DIR}/ca.crt \
+        -storepass confluent \
+        -noprompt
+
+    # Create truststore P12
+    keytool -importcert \
+        -keystore ${CERT_DIR}/${RESOURCE}-truststore.p12 \
+        -alias CAroot \
+        -file ${CERT_DIR}/ca.crt \
+        -storepass confluent \
+        -noprompt
+
+    remove_if_deleted secret tls-${RESOURCE}
+
+    kubectl create secret generic tls-${RESOURCE} \
+        --from-file=cacerts.pem=${CERT_DIR}/ca.crt \
+        --from-file=fullchain.pem=${CERT_DIR}/${RESOURCE}.pem \
+        --from-file=privkey.pem=${CERT_DIR}/${RESOURCE}-key.pem \
+        --from-file=truststore.p12=${CERT_DIR}/${RESOURCE}-truststore.p12 \
+        --from-file=keystore.p12=${CERT_DIR}/${RESOURCE}.p12 \
+        --namespace ${NAMESPACE} \
+        --save-config \
+        --dry-run=client \
+    -oyaml | kubectl apply -f -
+}

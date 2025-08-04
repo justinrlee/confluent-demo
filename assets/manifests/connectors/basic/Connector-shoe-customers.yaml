@@ -11,7 +11,6 @@ spec:
     name: connect
   configs:
     name: shoe-customers
-    # connector.class: io.confluent.connect.jms.IbmMqSinkConnector
     kafka.topic: shoe-customers
     quickstart: shoe_customers
     max.interval: "10000"

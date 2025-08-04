@@ -55,3 +55,6 @@ sleep 2
 
 kubectl delete namespace ${NAMESPACE} \
         || true
+
+kubectl delete namespace ${INGRESS_NGINX_NAMESPACE} \
+        || true

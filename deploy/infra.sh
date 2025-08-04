@@ -38,7 +38,7 @@ helm repo update
 
 # Create namespaces if they don't exist
 kubectl create namespace ${NAMESPACE} --dry-run=client -oyaml | kubectl apply -f -
-kubectl create namespace ${KEYCLOAK_NAMESPACE} --dry-run=client -oyaml | kubectl apply -f -
+# kubectl create namespace ${KEYCLOAK_NAMESPACE} --dry-run=client -oyaml | kubectl apply -f -
 kubectl create namespace ${INGRESS_NGINX_NAMESPACE} --dry-run=client -oyaml | kubectl apply -f -
 
 ##### Helm deploys
