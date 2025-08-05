@@ -2,19 +2,13 @@
 
 ## Check Prerequisites
 
+This will prompt for the Kubernetes context to use, and optionally allow you to indicate the IP address used to access Kubernetes services exposed via the Ingress NGINX controller.
+
 ```bash
 ./check_prereqs.sh
 ```
 
-If using Orbstack, use this:
-
-```bash
-./check_orbstack_prereqs.sh
-```
-
-## Installation: OIDC Demo (Recommended)
-
-Deploy infrastructure (Keycloak, CFK, CMF, FKO, Ingress-NGINX Ingress Controller, various certificates)
+## Installation
 
 ```bash
 ./install.sh oidc

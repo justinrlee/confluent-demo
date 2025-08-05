@@ -2,32 +2,13 @@
 
 ## Check Prerequisites
 
+This will prompt for the Kubernetes context to use, and optionally allow you to indicate the IP address used to access Kubernetes services exposed via the Ingress NGINX controller.
+
 ```bash
 ./check_prereqs.sh
 ```
 
-If using Orbstack, use this:
-
-```bash
-./check_orbstack_prereqs.sh
-```
-
-If installing on some other deployment, update the base domain by using a nip.io address from which your browser can access ingresses running on your Kubernetes cluster.
-* For example, if you're running K3s on a cloud VM, use the public IP address of the VM
-
-```bash
-./tools/set_base_domain.sh <IP-ADDRESS>
-```
-
-Then run this:
-
-```bash
-./check_remote_prereqs.sh
-```
-
-## Installation: OIDC Demo (Recommended)
-
-Deploy infrastructure (CFK, CMF, FKO, Ingress-NGINX Ingress Controller, various certificates)
+## Installation
 
 ```bash
 ./install.sh
@@ -50,8 +31,11 @@ Open up the control center UI: https://confluent.127-0-0-1.nip.io/
 Exec into the confluent-utility-0 container:
 
 ```bash
-kubectl -n confluent-demo exec -it confluent-utility-0 -- bash
+./tools/shell.sh
 ```
+
+(This is a wrapper on this command: `kubectl -n confluent-demo exec -it confluent-utility-0 -- bash`)
+
 
 Confluent CLI should generally work for interacting with CP Flink:
 
