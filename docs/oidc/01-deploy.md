@@ -17,7 +17,7 @@ If using Orbstack, use this:
 Deploy infrastructure (Keycloak, CFK, CMF, FKO, Ingress-NGINX Ingress Controller, various certificates)
 
 ```bash
-./install_oidc.sh
+./install.sh oidc
 ```
 
 Monitor pods as they come up (need Control Center to have 3/3 running containers); this may take some time to start.

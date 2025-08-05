@@ -6,10 +6,13 @@ set -x
 . ./.env
 . ./functions.sh
 
-#### Helm
-# FKO
+###### Creates / Installs the following:
 
-# #### Manifests: manifests/cmf-rbac
+# #### Secrets
+#     Secret/cmf-encryption-key
+#     Secret/tls-cmf
+
+# #### Manifests: manifests/cmf/oidc
 #     ClusterRole/${CMF_SERVICE_ACCOUNT} \
 #     ClusterRoleBinding/${CMF_SERVICE_ACCOUNT} \
 #     CMFRestClass/default \
@@ -17,25 +20,8 @@ set -x
 #     RoleBinding/${CMF_SERVICE_ACCOUNT} \
 #     ServiceAccount/${CMF_SERVICE_ACCOUNT} \
 
-# #### Secrets
-#     Secret/cmf-encryption-key
-#     Secret/tls-cmf
-
-##### Helm
-# CMF
-
-# #### Manifests: manifests/flink
-#     FlinkApplication/state-machine-example
-#     FlinkEnvironment/${NAMESPACE}
-
-# FKO: disable cert-manager cause it's super flaky
-helm upgrade --install cp-flink-kubernetes-operator \
-    confluentinc/flink-kubernetes-operator \
-    --set operatorPod.resources.requests.cpu=100m \
-    --set watchNamespaces=\{"${NAMESPACE}"\} \
-    --set webhook.create=false \
-    --namespace ${NAMESPACE} \
-    --version ${FKO_VERSION}
+### Helm charts
+# * CMF
 
 remove_if_deleted secret cmf-encryption-key
 
@@ -52,11 +38,10 @@ deploy_manifests ./assets/manifests/cmf/oidc
 
 envsubst < ./assets/cmf/values-oidc.yaml > ${LOCAL_DIR}/cmf-values.yaml
 
+# TODO: Update CRDs?
 # CMF
 helm upgrade --install cmf \
     confluentinc/confluent-manager-for-apache-flink \
     --values ${LOCAL_DIR}/cmf-values.yaml \
     --namespace ${NAMESPACE} \
     --version ${CMF_VERSION}
-
-deploy_manifests ./assets/manifests/flink

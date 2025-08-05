@@ -1,23 +1,25 @@
 
 ## TODO (Repo-level)
 
-* Refactor: combine prereqs scripts
-* Refactor: combine install/uninstall scripts
-* Refactor: move cfk secrets from infra to cfk
-* Refactor: split out deploys from waits
-* Refactor: break cpf into FKO and CMF
-* Refactor: split flinkapp/flinkenv into separate script
-* Switch CMF cleanup to API calls instead of CLI
-* Look at jq or kustomize templating for basic vs. oidc
-* Data governance stuff
-* Move CP CSFLE manifests to container
-* Improve Documentation
 * Look at Kubernetes Gateway API
+* Look at jq or kustomize templating for basic vs. oidc
+
+* Refactor: combine prereqs scripts
+* Refactor: split out deploys from waits
+* Switch CMF cleanup to API calls instead of CLI
+* Data governance stuff
+* Improve Documentation
+
+* ~~Refactor: move cfk secrets from infra to cfk~~
+* ~~Move CP CSFLE manifests to container~~
+* ~~Refactor: break cpf into FKO and CMF~~
 * ~~Refactor to single:~~
     * ~~vault~~
     * ~~connectors~~
     * ~~topics~~
     * ~~utility~~
+* ~~Refactor: combine install/uninstall scripts~~
+* ~~Refactor: split flinkapp/flinkenv into separate script~~
 * ~~Refactor: break out nginx installation~~
 * ~~Refactor certificate generation into function~~
 * ~~Move versions.sh > .env~~

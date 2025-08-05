@@ -26,7 +26,14 @@ Verify the csfle Vault key was properly created (and auth works, etc.)
 vault kv list transit/keys
 ```
 
-Create basic schema:
+Look at schema and encryption rule:
+
+```bash
+cat config/csfle-schema.json
+cat config/csfle-encryptionRule.json
+```
+
+Combine schema and encryption rule into single data governance rule:
 
 ```bash
 jq -s '{
@@ -35,7 +42,7 @@ jq -s '{
     ruleSet: {
         domainRules: [.[1]]
     }
-}' config/csfle-schema.json config/csfle-encryptionRule.json > csfle.json
+}' config/csfle-schema.json config/csfle-encryptionRule.json | tee csfle.json
 
 # Create a topic
 kafka-topics --bootstrap-server ${BS} --command-config config/client.properties --create --topic csfle --replication-factor=3

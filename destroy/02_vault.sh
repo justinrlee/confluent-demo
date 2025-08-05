@@ -11,3 +11,6 @@ kubectl -n ${VAULT_NAMESPACE} delete \
 
 helm uninstall vault \
     --namespace ${VAULT_NAMESPACE}
+
+kubectl delete namespace ${VAULT_NAMESPACE} \
+        || true

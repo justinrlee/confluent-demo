@@ -30,7 +30,7 @@ Then run this:
 Deploy infrastructure (CFK, CMF, FKO, Ingress-NGINX Ingress Controller, various certificates)
 
 ```bash
-./install_basic.sh
+./install.sh
 ```
 
 Monitor pods as they come up (need Control Center to have 3/3 running containers); this may take some time to start.

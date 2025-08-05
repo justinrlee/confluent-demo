@@ -6,20 +6,8 @@ set -x
 . ./.env
 . ./functions.sh
 
-# Todo - remove all compute statements, catalog, pools
-
-kubectl -n ${NAMESPACE} delete \
-    FlinkApplication/state-machine-example \
-    FlinkEnvironment/${NAMESPACE} \
-        || true
-
-# Todo - check for removal of all FA/FE
-clean_up_flinkdeployment
-sleep 2
-
 helm -n ${NAMESPACE} uninstall cmf
 
-# Todo - check for removal of all FD
 sleep 2
 
 kubectl -n ${NAMESPACE} delete \
@@ -32,9 +20,6 @@ kubectl -n ${NAMESPACE} delete \
         || true
 
 kubectl -n ${NAMESPACE} delete \
-    Secret/cmf-encryption-key \
     Secret/tls-cmf \
-    # Secret/tls-cmf-full \
+    Secret/cmf-encryption-key \
         || true
-
-helm -n ${NAMESPACE} uninstall cp-flink-kubernetes-operator

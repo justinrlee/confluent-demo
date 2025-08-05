@@ -48,8 +48,6 @@ set -x
 # controlcenter-oauth-jaas
 # cmf-oauth-jaas
 
-export MANIFEST_DIR=./assets/manifests/cfk/oidc
-
 tee ${LOCAL_DIR}/oauth_jaas.txt <<-'EOF'
 clientId=kafka
 clientSecret=LpXqoU8bqCqXgNsPKAJIJhQ9WafgWwsj
@@ -141,4 +139,5 @@ kubectl create -n ${NAMESPACE} secret generic \
     > ${LOCAL_DIR}/cmf-oauth-jaas.yaml
 kubectl apply -f ${LOCAL_DIR}/cmf-oauth-jaas.yaml
 
+export MANIFEST_DIR=./assets/manifests/cfk/oidc
 deploy_manifests ${MANIFEST_DIR}

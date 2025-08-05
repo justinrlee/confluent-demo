@@ -47,6 +47,10 @@ spec:
             - name: utility-config
               readOnly: true
               mountPath: /root/config
+            - name: utility-config
+              readOnly: true
+              mountPath: /root/client.properties
+              subPath: client.properties
       volumes:
         - name: client-tls
           secret:

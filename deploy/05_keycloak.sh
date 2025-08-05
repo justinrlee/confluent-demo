@@ -14,32 +14,12 @@ mkdir -p $CERT_DIR $CFSSL_DIR
 
 kubectl create namespace ${KEYCLOAK_NAMESPACE} --dry-run=client -oyaml | kubectl apply -f -
 
-## Deploy manifests
-cp ./assets/certificates/ca.crt ${CERT_DIR}/ca.crt
-cp ./assets/certificates/ca.key ${CERT_DIR}/ca.key
-cp ./assets/certificates/cfssl-ca.json ${CFSSL_DIR}/cfssl-ca.json
-cp ./assets/certificates/cfssl-cert.json ${CFSSL_DIR}/cfssl-cert.json
+# Copy CA certificates
+copy_ca_certs
 
-openssl x509 -in ${CERT_DIR}/ca.crt -text -noout
+create_certificate_secret keycloak
 
-export RESOURCE=keycloak
-
-envsubst < ./assets/cfssl-cert.json | tee ${CFSSL_DIR}/${RESOURCE}.json
-
-cfssl gencert \
-    -ca ${CERT_DIR}/ca.crt \
-    -ca-key ${CERT_DIR}/ca.key \
-    -config ${CFSSL_DIR}/cfssl-ca.json \
-    -profile server \
-    ${CFSSL_DIR}/${RESOURCE}.json | cfssljson -bare ${CERT_DIR}/${RESOURCE}
-
-kubectl -n ${KEYCLOAK_NAMESPACE} create secret tls tls-keycloak \
-        --cert=${CERT_DIR}/keycloak.pem \
-        --key=${CERT_DIR}/keycloak-key.pem \
-        --dry-run=client -oyaml --save-config \
-    | kubectl apply -f -
-
-# Populating keycloak realm configmap
+# Populate keycloak realm configmap
 kubectl -n ${KEYCLOAK_NAMESPACE} create configmap keycloak-realm \
         --from-file=realm.json=${MANIFEST_DIR}/realm.json \
         --dry-run=client -oyaml --save-config \

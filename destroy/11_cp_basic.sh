@@ -41,4 +41,10 @@ kubectl -n ${NAMESPACE} delete \
     kraftcontroller/kraft \
         || true
 
-# Manually created (TODO)
+# gt 2: ignore header lines and CFK operator pod
+while [[ $(kubectl -n ${NAMESPACE} get pods -l confluent-platform=true | wc -l ) -gt 2 ]];
+do
+    echo "Waiting 10s for CFK-managed pods to terminate"
+    kubectl -n ${NAMESPACE} get pods -l confluent-platform=true
+    sleep 10
+done
