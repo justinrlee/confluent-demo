@@ -1,4 +1,4 @@
-## Data Governance Demo (Basic Mode)
+## CSFLE Demo (Basic Mode)
 
 **This is currently only a very simple CSFLE demo**
 
@@ -29,8 +29,8 @@ vault kv list transit/keys
 Look at schema and encryption rule:
 
 ```bash
-cat config/csfle-schema.json
-cat config/csfle-encryptionRule.json
+cat governance/csfle-schema.json
+cat governance/csfle-encryptionRule.json
 ```
 
 Combine schema and encryption rule into single data governance rule:
@@ -42,7 +42,7 @@ jq -s '{
     ruleSet: {
         domainRules: [.[1]]
     }
-}' config/csfle-schema.json config/csfle-encryptionRule.json | tee csfle.json
+}' governance/csfle-schema.json governance/csfle-encryptionRule.json | tee csfle.json
 
 # Create a topic
 kafka-topics --bootstrap-server ${BS} --command-config config/client.properties --create --topic csfle --replication-factor=3

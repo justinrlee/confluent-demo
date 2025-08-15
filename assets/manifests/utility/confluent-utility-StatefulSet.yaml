@@ -16,6 +16,7 @@ spec:
       labels:
         app: confluent-utility # has to match .spec.selector.matchLabels
     spec:
+      serviceAccountName: confluent-utility
       terminationGracePeriodSeconds: 10
       containers:
         - name: utility
@@ -51,6 +52,9 @@ spec:
               readOnly: true
               mountPath: /root/client.properties
               subPath: client.properties
+            - name: utility-governance-config
+              readOnly: true
+              mountPath: /root/governance
       volumes:
         - name: client-tls
           secret:
@@ -58,3 +62,6 @@ spec:
         - name: utility-config
           configMap:
             name: utility-config
+        - name: utility-governance-config
+          configMap:
+            name: utility-governance-config

@@ -37,4 +37,4 @@ fi
 ./deploy/21_connectors.sh
 ./deploy/22_flink_resources.sh
 
-check_for_readiness
+./deploy/99_check_for_readiness.sh

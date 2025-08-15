@@ -46,7 +46,8 @@ Go to one of these two docs to install everything
 
 Basic Mode - moderately feature complete
 * [Basic Mode Installation](./docs/basic/01-deploy.md)
-* [Basic Mode CSFLE Demo](./docs/basic/02-data-governance.md)
+* [Basic Mode CSFLE Demo](./docs/basic/02-csfle.md)
+* [Basic Mode Governance Demo](./docs/basic/02-governance.md)
 * [Basic Mode CP Flink SQL Demo](./docs/basic/03-flink-sql-demo.md)
 
 OIDC Mode - WIP

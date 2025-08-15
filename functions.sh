@@ -128,6 +128,13 @@ deploy_manifests () {
     done
 }
 
+deploy_single_manifest () {
+    export MANIFEST_DIR=${1}
+    export MANIFEST_FILE=${2}
+    envsubst < ${MANIFEST_DIR}/${MANIFEST_FILE} > ${LOCAL_DIR}/${MANIFEST_FILE}
+    kubectl apply -f ${LOCAL_DIR}/${MANIFEST_FILE}
+}
+
 copy_ca_certs () {
     cp ./assets/certificates/ca.crt ${CERT_DIR}/ca.crt
     cp ./assets/certificates/ca.key ${CERT_DIR}/ca.key

@@ -45,6 +45,6 @@ confluent flink environment list
 
 ### Next Steps
 
-* [Data Governance (CSFLE) Demo](./02-data-governance.md)
+* [Data Governance (CSFLE) Demo](./02-csfle.md)
 * [CP Flink SQL Demo](./03-flink-sql-demo.md)
 * [Cleanup](./99-cleanup.md)
